@@ -24,6 +24,15 @@ if (!defined('ABSPATH')) {
             </div>
         </div>
 
+        <nav id="site-navigation" class="main-navigation">
+            <?php
+            wp_nav_menu(array(
+                    'theme_location' => 'primary',
+                    'menu_id' => 'primary-menu',
+            ));
+            ?>
+        </nav>
+
         <div class="header-search">
             <form role="search" method="get" class="header-search-form" action="<?php echo esc_url(home_url('/')); ?>">
                 <label class="screen-reader-text" for="header-search-field"><?php esc_html_e('검색', 'suji'); ?></label>
@@ -57,15 +66,6 @@ if (!defined('ABSPATH')) {
                    href="<?php echo esc_url(wp_registration_url()); ?>"><?php esc_html_e('회원가입', 'suji'); ?></a>
             <?php endif; ?>
         </div>
-
-        <nav id="site-navigation" class="main-navigation">
-            <?php
-            wp_nav_menu(array(
-                    'theme_location' => 'primary',
-                    'menu_id' => 'primary-menu',
-            ));
-            ?>
-        </nav>
     </div>
 </header>
 

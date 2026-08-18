@@ -1,5 +1,10 @@
-.front-page #primary {
-	max-width: 1000px;
+#primary.front-page {
+	padding: 0;
+}
+
+/* 배너만 .container 밖으로 나가 화면 전체를 쓰므로, 본문에는 좌우 여백을 따로 준다 */
+.front-page > .container {
+	padding: 0 2rem;
 }
 
 .hero-section{
@@ -7,10 +12,6 @@
 	flex-direction: column;
 	gap: 10px;
 
-}
-
-.hero-section .home-banner {
-	margin-bottom: 0;
 }
 
 /* ---------------------------- 미사시간 안내 ---------------------------- */
@@ -102,13 +103,12 @@
 }
 
 .home-banner {
-	margin-bottom: 2.5rem;
+	margin-bottom: 2rem;
 }
 
 .home-banner-swiper {
 	width: 100%;
 	aspect-ratio: 16 / 6;
-	border-radius: 8px;
 	overflow: hidden;
 }
 

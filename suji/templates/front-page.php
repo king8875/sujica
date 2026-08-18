@@ -23,54 +23,54 @@ $suji_gallery = get_posts(array(
 
         <?php $suji_front_page_id = get_option('page_on_front'); ?>
 
+        <?php if (function_exists('have_rows') && have_rows('home_banner_slides', $suji_front_page_id)) : ?>
+            <section class="home-banner">
+                <div class="swiper home-banner-swiper">
+                    <div class="swiper-wrapper">
+                        <?php while (have_rows('home_banner_slides', $suji_front_page_id)) : the_row();
+                            $suji_banner_image = get_sub_field('banner_image');
+                            $suji_banner_link = get_sub_field('banner_link');
+                            $suji_banner_title = get_sub_field('banner_title');
+                            $suji_banner_subtitle = get_sub_field('banner_subtitle');
+
+                            if (!$suji_banner_image) {
+                                continue;
+                            }
+                            ?>
+                            <div class="swiper-slide">
+                                <?php if ($suji_banner_link) : ?>
+                                <a target="_blank" href="<?php echo esc_url($suji_banner_link); ?>">
+                                    <?php endif; ?>
+
+                                        <img src="<?php echo esc_url($suji_banner_image['url']); ?>"
+                                             alt="<?php echo esc_attr($suji_banner_image['alt'] ? $suji_banner_image['alt'] : $suji_banner_title); ?>">
+
+                                        <?php if ($suji_banner_title || $suji_banner_subtitle) : ?>
+                                            <div class="home-banner-caption">
+                                                <?php if ($suji_banner_title) : ?>
+                                                    <h2><?php echo esc_html($suji_banner_title); ?></h2>
+                                                <?php endif; ?>
+                                                <?php if ($suji_banner_subtitle) : ?>
+                                                    <p><?php echo esc_html($suji_banner_subtitle); ?></p>
+                                                <?php endif; ?>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <?php if ($suji_banner_link) : ?>
+                                    </a>
+                                <?php endif; ?>
+                                </div>
+                            <?php endwhile; ?>
+                        </div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+                </section>
+            <?php endif; ?>
+
         <div class="container">
             <div class="hero-section">
-                <?php if (function_exists('have_rows') && have_rows('home_banner_slides', $suji_front_page_id)) : ?>
-                    <section class="home-banner">
-                        <div class="swiper home-banner-swiper">
-                            <div class="swiper-wrapper">
-                                <?php while (have_rows('home_banner_slides', $suji_front_page_id)) : the_row();
-                                    $suji_banner_image = get_sub_field('banner_image');
-                                    $suji_banner_link = get_sub_field('banner_link');
-                                    $suji_banner_title = get_sub_field('banner_title');
-                                    $suji_banner_subtitle = get_sub_field('banner_subtitle');
-
-                                    if (!$suji_banner_image) {
-                                        continue;
-                                    }
-                                    ?>
-                                    <div class="swiper-slide">
-                                        <?php if ($suji_banner_link) : ?>
-                                        <a target="_blank" href="<?php echo esc_url($suji_banner_link); ?>">
-                                            <?php endif; ?>
-
-                                            <img src="<?php echo esc_url($suji_banner_image['url']); ?>"
-                                                 alt="<?php echo esc_attr($suji_banner_image['alt'] ? $suji_banner_image['alt'] : $suji_banner_title); ?>">
-
-                                            <?php if ($suji_banner_title || $suji_banner_subtitle) : ?>
-                                                <div class="home-banner-caption">
-                                                    <?php if ($suji_banner_title) : ?>
-                                                        <h2><?php echo esc_html($suji_banner_title); ?></h2>
-                                                    <?php endif; ?>
-                                                    <?php if ($suji_banner_subtitle) : ?>
-                                                        <p><?php echo esc_html($suji_banner_subtitle); ?></p>
-                                                    <?php endif; ?>
-                                                </div>
-                                            <?php endif; ?>
-
-                                            <?php if ($suji_banner_link) : ?>
-                                        </a>
-                                    <?php endif; ?>
-                                    </div>
-                                <?php endwhile; ?>
-                            </div>
-                            <div class="swiper-pagination"></div>
-                            <div class="swiper-button-prev"></div>
-                            <div class="swiper-button-next"></div>
-                        </div>
-                    </section>
-                <?php endif; ?>
-
                 <div class="time-table">
                     <div class="notice-section timeline-block">
                         <h2><?php esc_html_e('미사시간안내', 'suji'); ?></h2>
