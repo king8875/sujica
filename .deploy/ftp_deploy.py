@@ -5,6 +5,8 @@
   python3 .deploy/ftp_deploy.py --all                 # 전체 업로드
   python3 .deploy/ftp_deploy.py --since <rev>         # rev..HEAD 변경분만
   python3 .deploy/ftp_deploy.py --range <old> <new>   # old..new 변경분만
+  python3 .deploy/ftp_deploy.py --watch                # 저장 즉시 자동 전송 (상주)
+  python3 .deploy/ftp_deploy.py --files suji/a.php ...  # 지정 파일만
   옵션: --dry-run (실제 전송 없이 목록만), --delete (원격 삭제까지 반영)
 
 접속 정보는 .deploy/config.env 에서 읽는다 (git 추적 대상 아님).
@@ -94,6 +96,15 @@ class Deployer:
                 raise
         self.made.add(rpath)
 
+    def reconnect(self):
+        try:
+            if self.ftp:
+                self.ftp.close()
+        except Exception:
+            pass
+        self.made.clear()
+        self.connect()
+
     def upload(self, rel):
         lpath = os.path.join(ROOT, rel)
         rpath = self.remote_path(rel)
@@ -115,13 +126,103 @@ class Deployer:
             print(f"    (삭제 건너뜀: {e})")
 
 
+IGNORE_SUFFIX = ("~", ".swp", ".swx", ".tmp", ".orig", ".rej")
+IGNORE_SUBSTR = ("___jb_tmp___", "___jb_old___", "/.git/", "/.idea/", ".DS_Store")
+
+
+def is_watchable(rel):
+    """에디터 임시 파일·숨김 파일은 전송 대상에서 제외한다."""
+    if not (rel == LOCAL_PREFIX or rel.startswith(LOCAL_PREFIX + "/")):
+        return False
+    if rel.endswith(IGNORE_SUFFIX) or any(s in rel for s in IGNORE_SUBSTR):
+        return False
+    return not any(part.startswith(".") for part in rel.split("/")[1:])
+
+
+def watch(cfg):
+    """suji/ 를 감시하다가 파일이 바뀌면 즉시 FTP 로 올린다."""
+    import shutil, threading
+    watch_dir = os.path.join(ROOT, LOCAL_PREFIX)
+    if not shutil.which("fswatch"):
+        sys.exit("fswatch 가 필요합니다:  brew install fswatch")
+
+    d = Deployer(cfg, dry=False)
+    d.connect()
+    print(f"[감시 시작] {watch_dir}")
+    print(f"           -> {cfg['FTP_HOST']}:{cfg['FTP_REMOTE_DIR']}")
+    print("           중지: Ctrl+C")
+
+    # FTP 유휴 타임아웃 방지용 keepalive
+    stop = threading.Event()
+
+    def keepalive():
+        while not stop.wait(45):
+            try:
+                d.ftp.voidcmd("NOOP")
+            except Exception:
+                pass
+
+    threading.Thread(target=keepalive, daemon=True).start()
+
+    proc = subprocess.Popen(
+        ["fswatch", "-0", "--latency", "0.3", "-r", watch_dir],
+        stdout=subprocess.PIPE)
+    buf = b""
+    try:
+        while True:
+            # os.read 는 파이프에 도착한 만큼만 즉시 돌려준다
+            # (buffered read(n) 은 n 바이트가 찰 때까지 블록된다)
+            chunk = os.read(proc.stdout.fileno(), 65536)
+            if not chunk:
+                break
+            buf += chunk
+            *paths, buf = buf.split(b"\0")
+            seen = []
+            for raw in paths:
+                abs_p = raw.decode("utf-8", "replace")
+                rel = os.path.relpath(abs_p, ROOT)
+                if rel in seen or not is_watchable(rel) or os.path.isdir(abs_p):
+                    continue
+                seen.append(rel)
+            for rel in seen:
+                for attempt in (1, 2):
+                    try:
+                        if os.path.exists(os.path.join(ROOT, rel)):
+                            d.upload(rel)
+                        else:
+                            d.delete(rel)
+                        break
+                    except Exception as e:
+                        if attempt == 1:
+                            print(f"    (재연결: {e})")
+                            d.reconnect()
+                        else:
+                            print(f"    ⚠ 실패: {rel} — {e}")
+    except KeyboardInterrupt:
+        print("\n[감시 종료]")
+    finally:
+        stop.set()
+        proc.terminate()
+        try:
+            d.ftp.quit()
+        except Exception:
+            pass
+
+
 def main():
     argv = sys.argv[1:]
     dry = "--dry-run" in argv
     do_delete = "--delete" in argv
     argv = [a for a in argv if a not in ("--dry-run", "--delete")]
 
-    if not argv or argv[0] == "--all":
+    if argv and argv[0] == "--watch":
+        watch(load_config())
+        return
+
+    if argv and argv[0] == "--files":
+        items = [("M", os.path.relpath(os.path.abspath(p), ROOT)) for p in argv[1:]]
+        label = f"지정 파일 {len(items)}건"
+    elif not argv or argv[0] == "--all":
         items = all_files()
         label = "전체"
     elif argv[0] == "--since":
