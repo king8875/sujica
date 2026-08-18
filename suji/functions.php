@@ -22,4 +22,6 @@ if ( is_admin() ) {
 	require SUJI_DIR . '/inc/admin/admin.php';
 	require SUJI_DIR . '/inc/admin/seed-clergy.php';
 	require SUJI_DIR . '/inc/admin/board-migrate.php';
+	require SUJI_DIR . '/inc/admin/importer.php';
+	require SUJI_DIR . '/inc/admin/importer-page.php';
 }
