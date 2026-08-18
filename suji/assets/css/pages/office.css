@@ -1,0 +1,630 @@
+.office {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+/* ------------------------------- 표제 ------------------------------- */
+.of-hero {
+	padding: 3.5rem 0 2.5rem;
+	text-align: center;
+}
+
+.of-title {
+	margin: 0 0 1.1rem;
+	font-size: clamp(1.6rem, 4vw, 2.1rem);
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.02em;
+}
+
+.of-lead {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.9;
+	color: #666;
+	word-break: keep-all;
+}
+
+/* ---------------------------- 업무 바로가기 ---------------------------- */
+/* 원본 탭을 대신하는 목차. 전체가 펼쳐져 있어 브라우저 검색·인쇄가 된다. */
+.of-nav {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-bottom: 3rem;
+	padding: 0.9rem 0;
+	border-bottom: 1px solid #e5e5e5;
+	background: rgba(255, 255, 255, 0.94);
+	backdrop-filter: blur(6px);
+}
+
+.of-nav-link {
+	padding: 0.45rem 0.9rem;
+	border: 1px solid #e0e0da;
+	border-radius: 999px;
+	background: #fff;
+	color: #333;
+	font-size: 0.85rem;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.of-nav-link:hover {
+	border-color: #111;
+	background: #111;
+	color: #fff;
+}
+
+/* ------------------------------ 섹션 ------------------------------ */
+.of-section {
+	margin-bottom: 4rem;
+	scroll-margin-top: 4.5rem;
+}
+
+.of-section:last-child {
+	margin-bottom: 0;
+}
+
+.of-heading {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin: 0 0 1.5rem;
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.01em;
+}
+
+.of-heading::before {
+	content: "";
+	flex-shrink: 0;
+	width: 4px;
+	height: 20px;
+	border-radius: 2px;
+	background: #111;
+}
+
+/* 혼인성사 / 혼배미사 같은 큰 구분 */
+.of-part {
+	margin: 2.5rem 0 1.25rem;
+	padding-bottom: 0.6rem;
+	border-bottom: 2px solid #111;
+	font-size: 1.02rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.of-block {
+	margin-bottom: 2rem;
+	max-width: 52rem;
+}
+
+.of-block:last-child {
+	margin-bottom: 0;
+}
+
+.of-subheading {
+	margin: 0 0 0.85rem;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: #111;
+}
+
+/* ------------------------------ 본문 ------------------------------ */
+.of-intro,
+.of-text {
+	max-width: 52rem;
+	margin: 0 0 1rem;
+	font-size: 0.95rem;
+	line-height: 1.9;
+	color: #444;
+	word-break: keep-all;
+}
+
+.of-text:last-child {
+	margin-bottom: 0;
+}
+
+.of-cite {
+	display: inline-block;
+	margin-left: 0.25rem;
+	font-size: 0.82rem;
+	color: #999;
+}
+
+.of-cite::before {
+	content: "(";
+}
+
+.of-cite::after {
+	content: ")";
+}
+
+.of-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.of-list > li {
+	position: relative;
+	padding: 0 0 0 1.5rem;
+	margin-bottom: 0.7rem;
+	font-size: 0.94rem;
+	line-height: 1.85;
+	color: #444;
+	word-break: keep-all;
+}
+
+.of-list > li:last-child {
+	margin-bottom: 0;
+}
+
+.of-list > li::before {
+	content: "";
+	position: absolute;
+	top: 0.75em;
+	left: 0.4rem;
+	width: 5px;
+	height: 5px;
+	border-radius: 50%;
+	background: #111;
+}
+
+.of-list b {
+	font-weight: 700;
+	color: #111;
+}
+
+/* 사목지침서 인용 목록 */
+.of-list-quote > li::before {
+	display: none;
+}
+
+.of-list-quote > li {
+	padding-left: 1.1rem;
+	border-left: 2px solid #e5e5e0;
+	color: #333;
+}
+
+.of-sublist {
+	margin: 0.6rem 0 0;
+	padding-left: 1.2rem;
+	color: #444;
+}
+
+.of-sublist li {
+	margin-bottom: 0.4rem;
+	font-size: 0.9rem;
+	line-height: 1.7;
+}
+
+.of-note {
+	display: inline-block;
+	font-size: 0.82rem;
+	color: #8a8a84;
+}
+
+.of-note::before {
+	content: "· ";
+}
+
+.of-notice {
+	display: flex;
+	align-items: baseline;
+	gap: 0.45rem;
+	margin: 1.1rem 0 0;
+	padding-top: 1rem;
+	border-top: 1px solid #f0f0ec;
+	font-size: 0.9rem;
+	line-height: 1.75;
+	color: #111;
+	word-break: keep-all;
+}
+
+.of-notice::before {
+	content: "※";
+	flex-shrink: 0;
+	color: #999;
+}
+
+/* ------------------------------ 카드 ------------------------------ */
+.of-card {
+	padding: 1.65rem 1.75rem;
+	border: 1px solid #e8e8e4;
+	border-radius: 12px;
+	background: #fff;
+}
+
+.of-quote-card {
+	max-width: 52rem;
+	margin-bottom: 2rem;
+	background: #fafaf8;
+}
+
+/* ---------------------------- 업무안내 ---------------------------- */
+.of-work {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1.25rem;
+}
+
+.of-hours {
+	flex: 1 1 26rem;
+	min-width: 0;
+}
+
+.of-side {
+	flex: 1 1 20rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	min-width: 0;
+}
+
+.of-rows {
+	margin: 0;
+}
+
+.of-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 1.25rem;
+	padding: 0.8rem 0;
+	border-bottom: 1px dashed #e4e4de;
+}
+
+.of-row:first-of-type {
+	padding-top: 0;
+}
+
+.of-row:last-of-type {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.of-row dt {
+	flex: 0 0 4.5em;
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.of-row dd {
+	flex: 1 1 12rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+	margin: 0;
+	font-size: 0.92rem;
+	line-height: 1.6;
+	color: #444;
+}
+
+.of-day b {
+	display: inline-block;
+	min-width: 3.2em;
+	font-weight: 700;
+	color: #111;
+}
+
+/* 연락처 */
+.of-contact-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.of-contact-list li {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem 1.25rem;
+	padding: 0.65rem 0;
+	border-bottom: 1px dashed #e4e4de;
+	font-size: 0.93rem;
+	color: #444;
+}
+
+.of-contact-list li:first-child {
+	padding-top: 0;
+}
+
+.of-contact-list li:last-child {
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.of-contact-label {
+	flex: 0 0 4.5em;
+	font-size: 0.88rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.of-contact-list a {
+	color: #111;
+	text-decoration: none;
+	border-bottom: 1px solid #ddd;
+}
+
+.of-contact-list a:hover {
+	border-bottom-color: #111;
+}
+
+/* ---------------------------- 혼인성사 절차 ---------------------------- */
+/* 원본 GIF 도식을 대신한다. 좁아지면 세로로 쌓인다. */
+.of-steps {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+	gap: 0.75rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: of-step;
+}
+
+.of-step {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+	padding: 1.1rem 1rem;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+	background: #fafaf8;
+}
+
+.of-step-no {
+	font-size: 0.72rem;
+	font-weight: 700;
+	color: #999;
+	letter-spacing: 0.04em;
+}
+
+.of-step-name {
+	font-size: 0.98rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.of-step-desc {
+	font-size: 0.82rem;
+	line-height: 1.6;
+	color: #666;
+	word-break: keep-all;
+}
+
+/* ------------------------------ 사진 배치 ------------------------------ */
+.of-split {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 1.75rem;
+}
+
+.of-figure {
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+.of-figure img {
+	display: block;
+	width: 180px;
+	max-width: 100%;
+	height: auto;
+	border-radius: 10px;
+}
+
+.of-split .of-list {
+	flex: 1 1 22rem;
+	min-width: 0;
+}
+
+/* ------------------------------- 표 ------------------------------- */
+.of-table-wrap {
+	overflow-x: auto;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+}
+
+.of-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.92rem;
+}
+
+.of-table th {
+	padding: 0.85rem 1rem;
+	background: #f4f4f1;
+	border-bottom: 1px solid #e3e3df;
+	font-weight: 700;
+	color: #111;
+	text-align: left;
+	white-space: nowrap;
+}
+
+.of-table td {
+	padding: 0.85rem 1rem;
+	border-bottom: 1px solid #efefec;
+	color: #444;
+	word-break: keep-all;
+}
+
+.of-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.of-table-total td {
+	background: #fafaf8;
+	font-weight: 700;
+	color: #111;
+}
+
+/* ---------------------------- 내려받기 · 링크 ---------------------------- */
+.of-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
+	margin-top: 1.25rem;
+}
+
+.of-download {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-top: 1.25rem;
+	padding: 0.7rem 1.25rem;
+	border: 1px solid #ddd;
+	border-radius: 10px;
+	background: #fafaf8;
+	color: #111;
+	text-decoration: none;
+	transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.of-actions .of-download {
+	margin-top: 0;
+}
+
+.of-download:hover {
+	border-color: #111;
+	background: #f4f4f1;
+}
+
+.of-download-name {
+	font-size: 0.92rem;
+	font-weight: 600;
+}
+
+.of-download-meta {
+	font-size: 0.78rem;
+	color: #999;
+}
+
+.of-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.7rem 1.25rem;
+	border: 1px solid #111;
+	border-radius: 10px;
+	color: #111;
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.of-link:hover {
+	background: #111;
+	color: #fff;
+}
+
+.of-link svg {
+	transition: transform 0.15s ease;
+}
+
+.of-link:hover svg {
+	transform: translateX(2px);
+}
+
+/* ------------------------------ 반응형 ------------------------------ */
+@media (max-width: 600px) {
+	.of-hero {
+		padding: 2.5rem 0 2rem;
+	}
+
+	.of-nav {
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		margin-bottom: 2.25rem;
+		padding: 0.75rem 0;
+		scrollbar-width: none;
+	}
+
+	.of-nav::-webkit-scrollbar {
+		display: none;
+	}
+
+	.of-section {
+		margin-bottom: 3rem;
+	}
+
+	.of-card {
+		padding: 1.35rem;
+	}
+
+	.of-row dt,
+	.of-contact-label {
+		flex: 0 0 100%;
+		font-size: 0.82rem;
+		color: #888;
+	}
+
+	.of-figure {
+		align-self: center;
+	}
+
+	.of-download,
+	.of-link {
+		width: 100%;
+		justify-content: center;
+	}
+
+	/* 표를 카드형으로 전환 */
+	.of-table-wrap {
+		border: 0;
+		border-radius: 0;
+		overflow: visible;
+	}
+
+	.of-table,
+	.of-table tbody,
+	.of-table tr,
+	.of-table td {
+		display: block;
+		width: 100%;
+	}
+
+	.of-table thead {
+		display: none;
+	}
+
+	.of-table tbody tr {
+		margin-bottom: 0.85rem;
+		border: 1px solid #e8e8e4;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	.of-table td {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.7rem 1rem;
+		text-align: right;
+		border-bottom: 1px solid #f0f0ed;
+	}
+
+	.of-table td:empty {
+		display: none;
+	}
+
+	.of-table td::before {
+		content: attr(data-label);
+		flex-shrink: 0;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: #888;
+		text-align: left;
+	}
+}
