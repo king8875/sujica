@@ -15,7 +15,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 const SUJI_IMPORT_ORIGIN = 'https://sujica.or.kr';
-const SUJI_IMPORT_QUEUE  = 'suji_import_queue';
+const SUJI_IMPORT_QUEUE  = 'suji_import_queue';    // 새로 만들 글
+const SUJI_IMPORT_ENRICH = 'suji_import_enrich';   // 이미 있는 글에 사진 채우기
+const SUJI_IMPORT_SCAN   = 'suji_import_scan_at';  // 훑기 진행 위치
 
 /**
  * 원본 게시판(bo_table) -> 새 글 타입 + 위원회 텀.
@@ -318,4 +320,71 @@ function suji_import_one( $bo, $wr_id ) {
 	$suji_imgs = suji_import_localize_images( $suji_post_id );
 
 	return sprintf( 'new: %s%s', $suji_data['title'], $suji_imgs ? " (사진 {$suji_imgs}장)" : '' );
+}
+
+/**
+ * 이미 있는 글에 원본의 사진을 채운다.
+ *
+ * 이관 당시 그누보드 첨부가 함께 넘어오지 않아 포토앨범 글 대부분이 본문에
+ * 사진 참조조차 없다. 원본 글을 다시 읽어 없는 사진만 더한다. 본문을 통째로
+ * 바꾸지 않으므로 이미 손본 글이 있어도 지워지지 않는다.
+ */
+function suji_import_enrich_one( $post_id, $bo, $wr_id ) {
+	$suji_post = get_post( $post_id );
+	if ( ! $suji_post ) {
+		return 'skip: 글이 없습니다';
+	}
+
+	// 본문에 남아 있는 원본 주소부터 옮긴다
+	$suji_moved = suji_import_localize_images( $post_id );
+	$suji_post  = get_post( $post_id );
+
+	$suji_html = suji_import_get( SUJI_IMPORT_ORIGIN . '/bbs/board.php?bo_table=' . $bo . '&wr_id=' . $wr_id );
+	if ( is_wp_error( $suji_html ) ) {
+		return 'error: ' . $suji_html->get_error_message();
+	}
+
+	$suji_data = suji_import_parse_post( $suji_html );
+	preg_match_all( '#<img[^>]+src="(https?://(?:www\.)?sujica\.or\.kr/[^"]+)"#i', $suji_data['content'], $suji_m );
+
+	$suji_added = 0;
+	$suji_html_add = '';
+
+	foreach ( array_unique( $suji_m[1] ?? array() ) as $suji_url ) {
+		// 이미 붙어 있는 사진이면 건너뛴다 (파일명으로 판단)
+		$suji_file = wp_basename( parse_url( $suji_url, PHP_URL_PATH ) );
+		$suji_stem = sanitize_title( pathinfo( $suji_file, PATHINFO_FILENAME ) );
+		if ( $suji_stem && false !== strpos( $suji_post->post_content, $suji_stem ) ) {
+			continue;
+		}
+
+		$suji_new = suji_import_sideload( $suji_url, $post_id );
+		if ( ! $suji_new ) {
+			continue;
+		}
+
+		$suji_html_add .= sprintf(
+			'<p><img src="%s" alt="%s"></p>' . "\n",
+			esc_url( $suji_new ),
+			esc_attr( get_the_title( $post_id ) )
+		);
+		$suji_added++;
+	}
+
+	if ( $suji_html_add ) {
+		wp_update_post( array(
+			'ID'           => $post_id,
+			'post_content' => $suji_post->post_content . "\n" . $suji_html_add,
+		) );
+	}
+
+	if ( ! get_post_thumbnail_id( $post_id ) ) {
+		$suji_atts = get_attached_media( 'image', $post_id );
+		if ( $suji_atts ) {
+			set_post_thumbnail( $post_id, reset( $suji_atts )->ID );
+		}
+	}
+
+	$suji_total = $suji_moved + $suji_added;
+	return $suji_total ? sprintf( '사진 %d장 추가', $suji_total ) : 'skip: 새 사진 없음';
 }
