@@ -18,7 +18,18 @@ $suji_term = get_queried_object();
 				<line x1="8" y1="17" x2="13" y2="17"></line>
 			</svg>
 		</span>
-		<h1 class="page-title"><?php echo esc_html( $suji_term->name ); ?></h1>
+		<h1 class="page-title">
+			<?php echo esc_html( $suji_term->name ); ?>
+			<?php if ( $suji_term->count ) : ?>
+				<span class="board-archive-count"><?php
+					printf(
+						/* translators: %s: 글 수 */
+						esc_html__( '전체 %s건', 'suji' ),
+						esc_html( number_format_i18n( $suji_term->count ) )
+					);
+				?></span>
+			<?php endif; ?>
+		</h1>
 		<p class="board-archive-desc"><?php esc_html_e( '수지성당의 공지사항을 안내해드립니다.', 'suji' ); ?></p>
 	</header>
 

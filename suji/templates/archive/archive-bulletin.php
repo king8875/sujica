@@ -18,7 +18,18 @@ $suji_term = get_queried_object();
 				<line x1="8" y1="16" x2="12" y2="16"></line>
 			</svg>
 		</span>
-		<h1 class="page-title"><?php echo esc_html( $suji_term->name ); ?></h1>
+		<h1 class="page-title">
+			<?php echo esc_html( $suji_term->name ); ?>
+			<?php if ( $suji_term->count ) : ?>
+				<span class="board-archive-count"><?php
+					printf(
+						/* translators: %s: 글 수 */
+						esc_html__( '전체 %s건', 'suji' ),
+						esc_html( number_format_i18n( $suji_term->count ) )
+					);
+				?></span>
+			<?php endif; ?>
+		</h1>
 		<p class="board-archive-desc"><?php esc_html_e( '매주 발행되는 본당 주보를 확인하세요.', 'suji' ); ?></p>
 	</header>
 

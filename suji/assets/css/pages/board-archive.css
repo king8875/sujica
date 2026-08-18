@@ -1,35 +1,57 @@
+/* ------------------------------ 머리말 ------------------------------ */
+.board-archive {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
 .board-archive-header {
-	display: flex;
+	display: grid;
+	grid-template-columns: auto 1fr;
 	align-items: center;
-	flex-wrap: wrap;
-	gap: 0.25rem 1rem;
+	gap: 0.35rem 1.1rem;
+	padding: 3rem 0 1.75rem;
 	margin-bottom: 2rem;
-	padding-bottom: 1.5rem;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid #e5e5e5;
 }
 
 .board-archive-icon {
+	grid-row: span 2;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 48px;
-	height: 48px;
-	border-radius: 50%;
+	width: 52px;
+	height: 52px;
+	border-radius: 14px;
 	flex-shrink: 0;
 	color: #fff;
 	background: #999;
 }
 
 .board-archive-header .page-title {
+	display: flex;
+	align-items: baseline;
+	gap: 0.7rem;
 	margin: 0;
 	font-size: 1.5rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.02em;
+}
+
+.board-archive-count {
+	font-size: 0.82rem;
+	font-weight: 400;
+	color: #999;
+	white-space: nowrap;
 }
 
 .board-archive-desc {
-	width: 100%;
-	margin: 0.25rem 0 0 64px;
+	margin: 0;
 	color: #777;
 	font-size: 0.9rem;
+	line-height: 1.6;
+	word-break: keep-all;
 }
 
 /* Accent colors per board */
@@ -139,8 +161,103 @@
 	cursor: pointer;
 }
 
-@media (max-width: 480px) {
-	.board-archive-desc {
-		margin-left: 0;
+
+/* ---------------------------- 페이지 넘기기 ---------------------------- */
+/* 공지사항만 68쪽이라 목록만큼이나 자주 쓰인다. */
+.board-archive .pagination {
+	margin-top: 2.5rem;
+}
+
+.board-archive .nav-links {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.board-archive .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 38px;
+	height: 38px;
+	padding: 0 0.7rem;
+	border: 1px solid #e0e0da;
+	border-radius: 8px;
+	background: #fff;
+	color: #444;
+	font-size: 0.88rem;
+	font-variant-numeric: tabular-nums;
+	text-decoration: none;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.board-archive a.page-numbers:hover {
+	border-color: #111;
+	color: #111;
+}
+
+.board-archive .page-numbers.current {
+	border-color: #111;
+	background: #111;
+	color: #fff;
+	font-weight: 700;
+}
+
+.board-archive .page-numbers.dots {
+	border-color: transparent;
+	background: none;
+	color: #bbb;
+	min-width: 1.5rem;
+	padding: 0;
+}
+
+.board-archive .page-numbers.prev,
+.board-archive .page-numbers.next {
+	font-size: 0.85rem;
+	color: #666;
+}
+
+/* ---------------------------- 전체 게시판 ---------------------------- */
+.board-archive .board-all-link {
+	margin: 2.5rem 0 0;
+	padding-top: 1.5rem;
+	border-top: 1px solid #f0f0ec;
+	font-size: 0.88rem;
+}
+
+.board-archive .board-all-link a {
+	color: #888;
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+.board-archive .board-all-link a:hover {
+	color: #111;
+}
+
+@media (max-width: 600px) {
+	.board-archive-header {
+		padding: 2.25rem 0 1.5rem;
+		gap: 0.3rem 0.9rem;
+	}
+
+	.board-archive-icon {
+		width: 44px;
+		height: 44px;
+		border-radius: 12px;
+	}
+
+	.board-archive-header .page-title {
+		font-size: 1.25rem;
+		gap: 0.5rem;
+	}
+
+	.board-archive .page-numbers {
+		min-width: 34px;
+		height: 34px;
+		padding: 0 0.5rem;
+		font-size: 0.84rem;
 	}
 }
