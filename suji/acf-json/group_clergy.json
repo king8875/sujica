@@ -1,0 +1,533 @@
+{
+    "key": "group_clergy",
+    "title": "성직자 및 수도자",
+    "fields": [
+        {
+            "key": "field_a8479ce39a25c",
+            "label": "역대 주임신부",
+            "name": "clergy_pastors",
+            "type": "repeater",
+            "instructions": "최신순으로 정렬해 주세요. 재임기간 끝을 '현재'로 두면 카드에 '현재' 배지가 붙습니다.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "conditional_logic": [],
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_e2e5743f331c7",
+                    "label": "사진",
+                    "name": "photo",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_6399275d8dae2",
+                    "label": "대수",
+                    "name": "rank",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "15",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_455e915863b77",
+                    "label": "이름 · 세례명",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_5b4f11a2e40f7",
+                    "label": "재임기간",
+                    "name": "term",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "35",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_b059abd59eb8f",
+            "label": "역대 보좌신부",
+            "name": "clergy_assistants",
+            "type": "repeater",
+            "instructions": "최신순으로 정렬해 주세요. 재임기간 끝을 '현재'로 두면 카드에 '현재' 배지가 붙습니다.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "conditional_logic": [],
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_c7102f958b128",
+                    "label": "사진",
+                    "name": "photo",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_b6217ab167f05",
+                    "label": "대수",
+                    "name": "rank",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "15",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_a5b52062fc719",
+                    "label": "이름 · 세례명",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_916f07f1cee89",
+                    "label": "재임기간",
+                    "name": "term",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "35",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_7c4688ce155c8",
+            "label": "역대 책임전교수녀",
+            "name": "clergy_lead_sisters",
+            "type": "repeater",
+            "instructions": "최신순으로 정렬해 주세요. 재임기간 끝을 '현재'로 두면 카드에 '현재' 배지가 붙습니다.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "conditional_logic": [],
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_2647fa7daeb44",
+                    "label": "사진",
+                    "name": "photo",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_93b39178ff555",
+                    "label": "이름 · 세례명",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_6834692e75f63",
+                    "label": "수도회",
+                    "name": "order",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_3f63d230e0204",
+                    "label": "재임기간",
+                    "name": "term",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_1098f2e823fe3",
+            "label": "역대 전교수녀",
+            "name": "clergy_sisters",
+            "type": "repeater",
+            "instructions": "최신순으로 정렬해 주세요. 재임기간 끝을 '현재'로 두면 카드에 '현재' 배지가 붙습니다.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "conditional_logic": [],
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_8eb37d18d8eb1",
+                    "label": "사진",
+                    "name": "photo",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_de1cfed9e68dd",
+                    "label": "이름 · 세례명",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_d1c518d2fb849",
+                    "label": "수도회",
+                    "name": "order",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "25",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_6b241a6847055",
+                    "label": "재임기간",
+                    "name": "term",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        },
+        {
+            "key": "field_0ab05c4e67eab",
+            "label": "본당 출신 사제",
+            "name": "clergy_natives",
+            "type": "repeater",
+            "instructions": "최신순으로 정렬해 주세요.",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "conditional_logic": [],
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "collapsed": "",
+            "sub_fields": [
+                {
+                    "key": "field_4b39614050865",
+                    "label": "사진",
+                    "name": "photo",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "20",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "return_format": "array",
+                    "preview_size": "thumbnail",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": ""
+                },
+                {
+                    "key": "field_bb5d4a4488d80",
+                    "label": "이름 · 세례명",
+                    "name": "name",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                },
+                {
+                    "key": "field_550513d25a0ec",
+                    "label": "서품일",
+                    "name": "term",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "40",
+                        "class": "",
+                        "id": ""
+                    },
+                    "conditional_logic": [],
+                    "maxlength": "",
+                    "prepend": "",
+                    "append": ""
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "3114"
+            }
+        ]
+    ],
+    "position": "normal",
+    "priority": "default",
+    "menu_order": 0,
+    "status": "publish",
+    "sync_seo_content": 0,
+    "_lof_version": "2.0.0",
+    "_modified": 1787030000
+}

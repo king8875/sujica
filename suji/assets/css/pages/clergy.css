@@ -1,0 +1,246 @@
+.clergy {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+/* ------------------------------- 표제 ------------------------------- */
+.cl-hero {
+	padding: 3.5rem 0 2.5rem;
+	text-align: center;
+}
+
+.cl-title {
+	margin: 0 0 1.1rem;
+	font-size: clamp(1.6rem, 4vw, 2.1rem);
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.02em;
+}
+
+.cl-lead {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.9;
+	color: #666;
+	word-break: keep-all;
+}
+
+/* ---------------------------- 섹션 바로가기 ---------------------------- */
+/* 71명이라 스크롤이 길다. 상단에 고정해 어느 위치에서든 이동할 수 있게 한다. */
+.cl-nav {
+	position: sticky;
+	top: 0;
+	z-index: 20;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-bottom: 3rem;
+	padding: 0.9rem 0;
+	border-bottom: 1px solid #e5e5e5;
+	background: rgba(255, 255, 255, 0.94);
+	backdrop-filter: blur(6px);
+}
+
+.cl-nav-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.45rem 0.9rem;
+	border: 1px solid #e0e0da;
+	border-radius: 999px;
+	background: #fff;
+	color: #333;
+	font-size: 0.85rem;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.cl-nav-link:hover {
+	border-color: #111;
+	background: #111;
+	color: #fff;
+}
+
+.cl-nav-count {
+	font-size: 0.75rem;
+	font-weight: 400;
+	color: #999;
+}
+
+.cl-nav-link:hover .cl-nav-count {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+/* ------------------------------ 섹션 ------------------------------ */
+.cl-section {
+	margin-bottom: 3.5rem;
+	/* sticky 목차에 제목이 가리지 않도록 */
+	scroll-margin-top: 4.5rem;
+}
+
+.cl-section:last-child {
+	margin-bottom: 0;
+}
+
+.cl-heading {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin: 0 0 1.5rem;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.01em;
+}
+
+.cl-heading::before {
+	content: "";
+	flex-shrink: 0;
+	width: 4px;
+	height: 18px;
+	border-radius: 2px;
+	background: #111;
+}
+
+.cl-heading-count {
+	font-size: 0.82rem;
+	font-weight: 400;
+	color: #999;
+}
+
+/* ------------------------------ 그리드 ------------------------------ */
+/* 원본 사진이 108x146 이라 카드 폭을 그 언저리로 잡아야 흐려지지 않는다. */
+.cl-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+	gap: 1.5rem 1.25rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.cl-card {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.cl-photo {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 108 / 146;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+	background: #f4f4f1;
+}
+
+.cl-photo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.cl-card.is-current .cl-photo {
+	border-color: #111;
+	box-shadow: 0 0 0 2px #111;
+}
+
+.cl-badge {
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	padding: 0.2rem 0.5rem;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-size: 0.7rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+}
+
+/* ------------------------------ 카드 정보 ------------------------------ */
+.cl-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	min-width: 0;
+}
+
+.cl-rank {
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: #999;
+	letter-spacing: 0.02em;
+}
+
+.cl-name {
+	margin: 0;
+	font-size: 0.92rem;
+	font-weight: 700;
+	line-height: 1.45;
+	color: #111;
+	word-break: keep-all;
+}
+
+.cl-order {
+	margin: 0.15rem 0 0;
+	font-size: 0.72rem;
+	line-height: 1.4;
+	color: #8a8a84;
+	word-break: keep-all;
+}
+
+.cl-term {
+	margin: 0.25rem 0 0;
+	font-size: 0.76rem;
+	line-height: 1.5;
+	color: #666;
+	word-break: keep-all;
+}
+
+.cl-term-label {
+	color: #aaa;
+}
+
+.cl-term-label::after {
+	content: " ";
+}
+
+/* ------------------------------ 반응형 ------------------------------ */
+@media (max-width: 600px) {
+	.cl-hero {
+		padding: 2.5rem 0 2rem;
+	}
+
+	.cl-nav {
+		justify-content: flex-start;
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		margin-bottom: 2.25rem;
+		padding: 0.75rem 0;
+		/* 스크롤되는 목차가 화면 끝까지 닿도록 */
+		scrollbar-width: none;
+	}
+
+	.cl-nav::-webkit-scrollbar {
+		display: none;
+	}
+
+	.cl-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.cl-grid {
+		grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+		gap: 1.25rem 0.85rem;
+	}
+
+	.cl-name {
+		font-size: 0.85rem;
+	}
+}

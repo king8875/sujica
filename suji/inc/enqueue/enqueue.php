@@ -54,6 +54,10 @@ function suji_enqueue_assets() {
 		wp_enqueue_style( 'suji-patron-saint', SUJI_URI . '/assets/css/pages/patron-saint.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/patron-saint.css' ) );
 	}
 
+	if ( is_page( 'clergy' ) ) {
+		wp_enqueue_style( 'suji-clergy', SUJI_URI . '/assets/css/pages/clergy.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/clergy.css' ) );
+	}
+
 	if ( is_tax( 'board_cat' ) || is_search() ) {
 		wp_enqueue_style( 'suji-board-archive', SUJI_URI . '/assets/css/pages/board-archive.css', array( 'suji-board-post' ), suji_asset_version( '/assets/css/pages/board-archive.css' ) );
 	}
