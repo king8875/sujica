@@ -1,24 +1,310 @@
-.board-single .board-single-cat a {
-	font-size: 0.85rem;
-	color: #888;
+/**
+ * 게시글 상세 — board_post 단일 화면.
+ * 본문이 gnuboard 에서 옮겨온 임의의 HTML(문단·줄바꿈·이미지·링크)이라
+ * 기본 태그를 폭넓게 잡아둔다.
+ */
+.board-single {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 0 0 4rem;
 }
 
-.board-single .entry-content {
-	margin-top: 1.5rem;
-	line-height: 1.8;
+/* ------------------------------ 머리말 ------------------------------ */
+.board-single-header {
+	padding: 2.5rem 0 1.5rem;
+	margin-bottom: 2rem;
+	border-bottom: 1px solid #e5e5e5;
 }
 
-.board-single .entry-content img {
+.board-single-cat {
+	display: inline-block;
+	margin-bottom: 0.9rem;
+	padding: 0.3rem 0.75rem;
+	border: 1px solid #e0e0da;
+	border-radius: 999px;
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: #666;
+	text-decoration: none;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.board-single-cat:hover {
+	border-color: #111;
+	background: #111;
+	color: #fff;
+}
+
+/* 기존에는 18px / weight 400 이라 본문과 구분되지 않았다. */
+.board-single-title {
+	margin: 0 0 1rem;
+	font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+	font-weight: 700;
+	line-height: 1.4;
+	color: #111;
+	letter-spacing: -0.02em;
+	word-break: keep-all;
+}
+
+.board-single-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem 1rem;
+	font-size: 0.83rem;
+	color: #999;
+}
+
+.board-single-meta time {
+	font-variant-numeric: tabular-nums;
+}
+
+.board-single-author {
+	font-weight: 600;
+	color: #666;
+}
+
+.board-single-hit {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.board-single-hit svg {
+	color: #c4c4bc;
+}
+
+/* ------------------------------ 본문 ------------------------------ */
+.board-single-content {
+	font-size: 1rem;
+	line-height: 1.9;
+	color: #333;
+	word-break: keep-all;
+}
+
+.board-single-content > *:first-child {
+	margin-top: 0;
+}
+
+.board-single-content > *:last-child {
+	margin-bottom: 0;
+}
+
+.board-single-content p {
+	margin: 0 0 1.35rem;
+}
+
+.board-single-content h2,
+.board-single-content h3,
+.board-single-content h4 {
+	margin: 2.25rem 0 0.9rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.01em;
+}
+
+.board-single-content h2 { font-size: 1.2rem; }
+.board-single-content h3 { font-size: 1.08rem; }
+.board-single-content h4 { font-size: 1rem; }
+
+.board-single-content ul,
+.board-single-content ol {
+	margin: 0 0 1.35rem;
+	padding-left: 1.4rem;
+}
+
+.board-single-content li {
+	margin-bottom: 0.45rem;
+}
+
+/* 옮겨온 글에 큰 사진이 자주 들어간다 */
+.board-single-content img {
+	display: block;
 	max-width: 100%;
 	height: auto;
+	margin: 1.5rem auto;
+	border-radius: 8px;
 }
 
-.board-single-footer {
-	margin-top: 2rem;
-	padding-top: 1rem;
+.board-single-content a {
+	color: #111;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	/* 유튜브 주소 같은 긴 링크가 넘치지 않도록 */
+	overflow-wrap: anywhere;
+}
+
+.board-single-content a:hover {
+	color: #555;
+}
+
+.board-single-content blockquote {
+	margin: 1.5rem 0;
+	padding: 1rem 1.35rem;
+	border-left: 3px solid #111;
+	border-radius: 0 8px 8px 0;
+	background: #fafaf8;
+	color: #444;
+}
+
+/* 옮겨온 표는 폭이 제각각이라 넘치면 가로로 스크롤시킨다 */
+.board-single-content table {
+	display: block;
+	width: 100%;
+	overflow-x: auto;
+	border-collapse: collapse;
+	margin: 1.5rem 0;
+	font-size: 0.92rem;
+}
+
+.board-single-content th,
+.board-single-content td {
+	padding: 0.7rem 0.9rem;
+	border: 1px solid #e8e8e4;
+	text-align: left;
+}
+
+.board-single-content th {
+	background: #f4f4f1;
+	font-weight: 700;
+	color: #111;
+}
+
+.board-single-content iframe {
+	max-width: 100%;
+}
+
+.board-single-content hr {
+	margin: 2rem 0;
+	border: 0;
 	border-top: 1px solid #eee;
 }
 
+/* --------------------------- 이전 / 다음 글 --------------------------- */
+.board-single-nav {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.75rem;
+	margin-top: 3rem;
+	padding-top: 2rem;
+	border-top: 1px solid #e5e5e5;
+}
+
+.board-single-nav-item {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	min-width: 0;
+	padding: 1rem 1.25rem;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+	color: inherit;
+	text-decoration: none;
+	transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.board-single-nav-item:hover {
+	border-color: #111;
+	background: #fafaf8;
+}
+
+/* 이전 글이 없으면 다음 글이 오른쪽에 붙게 한다 */
+.board-single-nav-item.is-next:only-child {
+	grid-column: 2;
+}
+
+.board-single-nav-item.is-next {
+	text-align: right;
+}
+
+.board-single-nav-label {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: #999;
+}
+
+.board-single-nav-item.is-next .board-single-nav-label {
+	justify-content: flex-end;
+}
+
+.board-single-nav-title {
+	font-size: 0.9rem;
+	line-height: 1.5;
+	color: #333;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.board-single-nav-item:hover .board-single-nav-title {
+	color: #111;
+}
+
+/* ------------------------------ 목록으로 ------------------------------ */
+.board-single-footer {
+	margin-top: 2rem;
+	text-align: center;
+}
+
+.board-back-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.5rem;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.board-back-link:hover {
+	background: #333;
+	color: #fff;
+}
+
+/* 아카이브 하단의 '전체 게시판 보기' */
 .board-all-link {
 	margin-top: 2rem;
+}
+
+/* ------------------------------ 반응형 ------------------------------ */
+@media (max-width: 600px) {
+	.board-single-header {
+		padding: 1.75rem 0 1.25rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.board-single-content {
+		font-size: 0.95rem;
+	}
+
+	.board-single-nav {
+		grid-template-columns: 1fr;
+		margin-top: 2.25rem;
+		padding-top: 1.5rem;
+	}
+
+	.board-single-nav-item.is-next:only-child {
+		grid-column: 1;
+	}
+
+	.board-single-nav-item.is-next {
+		text-align: left;
+	}
+
+	.board-single-nav-item.is-next .board-single-nav-label {
+		justify-content: flex-start;
+	}
+
+	.board-back-link {
+		width: 100%;
+		justify-content: center;
+	}
 }
