@@ -66,6 +66,10 @@ function suji_enqueue_assets() {
 		wp_enqueue_style( 'suji-committee', SUJI_URI . '/assets/css/pages/committee.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/committee.css' ) );
 	}
 
+	if ( is_page( 'catholic-about' ) ) {
+		wp_enqueue_style( 'suji-catholic-about', SUJI_URI . '/assets/css/pages/catholic-about.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/catholic-about.css' ) );
+	}
+
 	if ( is_tax( 'board_cat' ) || is_search() ) {
 		wp_enqueue_style( 'suji-board-archive', SUJI_URI . '/assets/css/pages/board-archive.css', array( 'suji-board-post' ), suji_asset_version( '/assets/css/pages/board-archive.css' ) );
 	}

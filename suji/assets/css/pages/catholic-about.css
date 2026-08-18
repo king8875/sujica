@@ -1,0 +1,53 @@
+.catholic-about {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+/* ------------------------------- 표제 ------------------------------- */
+/* 기존에는 entry-title 이 18px / weight 400 이라 본문과 구분되지 않았다. */
+.ca-hero {
+	padding: 3.5rem 0 2.5rem;
+	margin-bottom: 3rem;
+	border-bottom: 1px solid #e5e5e5;
+	text-align: center;
+}
+
+.ca-title {
+	margin: 0 0 1.1rem;
+	font-size: clamp(1.6rem, 4vw, 2.1rem);
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.02em;
+}
+
+.ca-lead {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.9;
+	color: #666;
+	word-break: keep-all;
+}
+
+/* ------------------------------ 목록 ------------------------------ */
+/* 제목 한 줄짜리 항목이 1200px 로 늘어나면 번호와 화살표가 너무 멀어진다. */
+.ca-accordion {
+	max-width: 60rem;
+	margin: 0 auto;
+}
+
+.ca-content {
+	max-width: 52rem;
+	margin: 0 auto;
+	font-size: 0.95rem;
+	line-height: 1.9;
+	color: #444;
+	word-break: keep-all;
+}
+
+@media (max-width: 600px) {
+	.ca-hero {
+		padding: 2.5rem 0 2rem;
+		margin-bottom: 2.25rem;
+	}
+}
