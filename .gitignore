@@ -1,0 +1,13 @@
+# 접속 정보 (절대 커밋 금지)
+.deploy/config.env
+
+# PhpStorm
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 워드프레스 빌드 부산물
+node_modules/
+*.log

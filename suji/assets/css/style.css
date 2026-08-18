@@ -1,0 +1,2 @@
+/* Not enqueued — kept for reference only. Actual loading happens via inc/enqueue/enqueue.php,
+   which enqueues each file below individually (avoids @import's extra round-trips). */

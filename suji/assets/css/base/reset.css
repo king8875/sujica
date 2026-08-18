@@ -1,0 +1,136 @@
+:root {
+
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box !important;
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+fieldset,
+input {
+    border: 0;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    object-fit: cover;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+section {
+    position: relative;
+}
+
+/* ------------------------------ Typography ------------------------------ */
+html {
+    font-size: clamp(14px, 1.6vw, 18px);
+    scrollbar-gutter: stable;
+}
+
+html,
+body {
+    overscroll-behavior: none;
+    overflow-x: clip;
+    width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    line-height: 1.2;
+    /* margin: 0 0 0.5em; */
+    color: inherit;
+}
+
+
+body {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    word-break: keep-all;
+    font-family: "Pretendard", sans-serif !important;
+    /* font-family: "NotoSansKR", sans-serif !important; */
+    letter-spacing: -0.025em;
+    line-height: 1.6;
+    /* overflow-x: hidden; */
+    font-size: 1rem;
+    color: #000;
+    background: #fff;
+}
+
+html.menu-open,
+body.menu-open {
+    overflow: hidden;
+    height: 100%;
+}
+
+body.menu-open {
+    position: fixed;
+    width: 100%;
+}
+
+main {
+    flex: 1;
+}
+
+.side_bottom--block .side_bottom--right::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Edge */
+}
+
+@media screen and (max-width: 992px) {
+    body {
+        -ms-overflow-style: none;
+        /* IE & Edge */
+        /* scrollbar-width: none; */
+        /* Firefox */
+    }
+
+    body::-webkit-scrollbar {
+        display: none !important;
+        /* Safari & Chrome */
+    }
+}

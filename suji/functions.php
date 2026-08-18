@@ -1,0 +1,20 @@
+<?php
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+define( 'SUJI_VERSION', '1.0.0' );
+define( 'SUJI_DIR', get_template_directory() );
+define( 'SUJI_URI', get_template_directory_uri() );
+
+require SUJI_DIR . '/inc/setup.php';
+require SUJI_DIR . '/inc/board-cpt.php';
+require SUJI_DIR . '/inc/template-loader.php';
+require SUJI_DIR . '/inc/auth.php';
+// Home banner ACF field group is managed directly in wp-admin (Custom Fields), not in code.
+require SUJI_DIR . '/inc/enqueue/enqueue.php';
+require SUJI_DIR . '/inc/customizer/customizer.php';
+
+if ( is_admin() ) {
+	require SUJI_DIR . '/inc/admin/admin.php';
+}

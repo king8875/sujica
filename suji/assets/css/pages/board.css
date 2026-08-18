@@ -1,0 +1,24 @@
+.board-single .board-single-cat a {
+	font-size: 0.85rem;
+	color: #888;
+}
+
+.board-single .entry-content {
+	margin-top: 1.5rem;
+	line-height: 1.8;
+}
+
+.board-single .entry-content img {
+	max-width: 100%;
+	height: auto;
+}
+
+.board-single-footer {
+	margin-top: 2rem;
+	padding-top: 1rem;
+	border-top: 1px solid #eee;
+}
+
+.board-all-link {
+	margin-top: 2rem;
+}

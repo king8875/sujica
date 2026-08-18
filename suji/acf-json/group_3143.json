@@ -1,0 +1,72 @@
+{
+    "key": "group_3143",
+    "title": "가톨릭 소개",
+    "fields": [
+        {
+            "key": "field_8fscalegj",
+            "label": "accordion_items",
+            "name": "accordion_items",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "sub_fields": [
+                {
+                    "key": "field_3xodvfx20",
+                    "label": "accordion_title",
+                    "name": "accordion_title",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    }
+                },
+                {
+                    "key": "field_6vv3o28gv",
+                    "label": "accordion_content",
+                    "name": "accordion_content",
+                    "type": "wysiwyg",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    }
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "3102"
+            }
+        ]
+    ],
+    "position": "normal",
+    "priority": "default",
+    "menu_order": 0,
+    "status": "publish",
+    "_cfp_version": "1.0.0",
+    "_modified": 1785661543
+}

@@ -1,0 +1,73 @@
+{
+    "key": "group_3138",
+    "title": "배너 슬라이드",
+    "fields": [
+        {
+            "key": "field_q4ow4v8vp",
+            "label": "배너 슬라이드",
+            "name": "home_banner_slides",
+            "type": "repeater",
+            "instructions": "",
+            "required": 0,
+            "default_value": "",
+            "placeholder": "",
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "table",
+            "min_rows": "",
+            "max_rows": "",
+            "button_label": "행 추가",
+            "sub_fields": [
+                {
+                    "key": "field_yudrzeqc7",
+                    "label": "이미지",
+                    "name": "banner_image",
+                    "type": "image",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array"
+                },
+                {
+                    "key": "field_iysvtr7dl",
+                    "label": "링크",
+                    "name": "banner_link",
+                    "type": "url",
+                    "instructions": "",
+                    "required": 0,
+                    "default_value": "",
+                    "placeholder": "",
+                    "wrapper": {
+                        "width": "",
+                        "class": "",
+                        "id": ""
+                    }
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "page",
+                "operator": "==",
+                "value": "9"
+            }
+        ]
+    ],
+    "position": "normal",
+    "priority": "default",
+    "menu_order": 0,
+    "status": "publish",
+    "_cfp_version": "1.0.0",
+    "_modified": 1785647098
+}

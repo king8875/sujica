@@ -1,0 +1,4 @@
+/* Pretendard is loaded from CDN, see inc/enqueue/enqueue.php */
+body {
+	font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}

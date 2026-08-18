@@ -1,0 +1,267 @@
+.pastoral-letter {
+	max-width: 760px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+/* ------------------------------- 표제 ------------------------------- */
+.pl-hero {
+	padding: 3.5rem 0 2.5rem;
+	margin-bottom: 3rem;
+	border-bottom: 1px solid #e5e5e5;
+	text-align: center;
+}
+
+.pl-eyebrow {
+	margin: 0 0 0.9rem;
+	font-size: 0.85rem;
+	font-weight: 500;
+	color: #888;
+	letter-spacing: 0.02em;
+}
+
+.pl-title {
+	margin: 0;
+	font-size: clamp(1.6rem, 4vw, 2.2rem);
+	font-weight: 700;
+	line-height: 1.35;
+	color: #111;
+	letter-spacing: -0.02em;
+}
+
+.pl-title::before,
+.pl-title::after {
+	content: "“";
+	color: #c9c9c4;
+	font-weight: 400;
+}
+
+.pl-title::after {
+	content: "”";
+}
+
+/* ------------------------------- 본문 ------------------------------- */
+.pl-section {
+	margin-bottom: 3.5rem;
+}
+
+.pl-section:last-of-type {
+	margin-bottom: 3rem;
+}
+
+.pl-heading {
+	display: flex;
+	align-items: baseline;
+	gap: 0.75rem;
+	margin: 0 0 1.5rem;
+	font-size: 1.15rem;
+	font-weight: 700;
+	line-height: 1.5;
+	color: #111;
+	letter-spacing: -0.01em;
+}
+
+.pl-num {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2rem;
+	height: 2rem;
+	padding: 0 0.4rem;
+	border-radius: 50%;
+	background: #111;
+	color: #fff;
+	font-size: 0.85rem;
+	font-weight: 700;
+}
+
+.pl-body p {
+	margin: 0 0 1.15rem;
+	font-size: 1rem;
+	line-height: 2;
+	color: #3a3a3a;
+	word-break: keep-all;
+}
+
+.pl-body p:last-child {
+	margin-bottom: 0;
+}
+
+/* ---------------------------- 연도별 실천 ---------------------------- */
+.pl-plan {
+	counter-reset: pl-plan;
+	margin: 1.75rem 0 0;
+	padding: 1.5rem 1.5rem 1.5rem 1.75rem;
+	list-style: none;
+	border-left: 3px solid #111;
+	background: #fafaf8;
+	border-radius: 0 8px 8px 0;
+}
+
+.pl-plan li {
+	position: relative;
+	margin-bottom: 0.85rem;
+	padding-left: 1.9rem;
+	font-size: 0.95rem;
+	line-height: 1.8;
+	color: #333;
+	word-break: keep-all;
+	counter-increment: pl-plan;
+}
+
+.pl-plan li:last-child {
+	margin-bottom: 0;
+}
+
+.pl-plan li::before {
+	content: counter(pl-plan);
+	position: absolute;
+	left: 0;
+	top: 0.28em;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.35rem;
+	height: 1.35rem;
+	border-radius: 50%;
+	border: 1px solid #bbb;
+	font-size: 0.72rem;
+	font-weight: 600;
+	color: #666;
+	line-height: 1;
+}
+
+.pl-year {
+	font-weight: 700;
+	color: #111;
+}
+
+.pl-plan em {
+	font-style: normal;
+	color: #888;
+}
+
+/* ------------------------------- 인용 ------------------------------- */
+.pl-quote {
+	margin: 2rem 0;
+	padding: 1.75rem 1.75rem 1.5rem;
+	border-radius: 10px;
+	background: #f4f4f1;
+}
+
+.pl-quote p {
+	margin: 0 0 0.9rem;
+	font-size: 0.98rem;
+	line-height: 1.95;
+	color: #333;
+	word-break: keep-all;
+}
+
+.pl-quote cite {
+	display: block;
+	font-size: 0.82rem;
+	font-style: normal;
+	color: #888;
+	text-align: right;
+}
+
+.pl-quote cite::before {
+	content: "— ";
+}
+
+/* ------------------------------- 기도 ------------------------------- */
+.pl-prayer {
+	margin: 4rem 0 3rem;
+	padding: 2.5rem 2rem;
+	border: 1px solid #e3e3df;
+	border-radius: 12px;
+	background: #fcfcfa;
+	text-align: center;
+}
+
+.pl-prayer-title {
+	margin: 0 0 1.75rem;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.pl-prayer-title::after {
+	content: "";
+	display: block;
+	width: 32px;
+	height: 2px;
+	margin: 0.85rem auto 0;
+	background: #111;
+}
+
+.pl-prayer-body p {
+	margin: 0 0 1.25rem;
+	font-size: 0.95rem;
+	line-height: 1.95;
+	color: #3a3a3a;
+	word-break: keep-all;
+}
+
+.pl-prayer-body p:last-child {
+	margin-bottom: 0;
+}
+
+.pl-mark {
+	display: inline-block;
+	margin-right: 0.4rem;
+	color: #999;
+	font-size: 0.85rem;
+}
+
+/* ------------------------------ 서명 ------------------------------ */
+.pl-sign {
+	padding-top: 2.5rem;
+	border-top: 1px solid #e5e5e5;
+	text-align: right;
+}
+
+.pl-date {
+	margin: 0 0 0.85rem;
+	font-size: 0.88rem;
+	line-height: 1.7;
+	color: #888;
+}
+
+.pl-author {
+	margin: 0;
+	font-size: 1rem;
+	color: #333;
+}
+
+.pl-author strong {
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: 0.02em;
+}
+
+@media (max-width: 600px) {
+	.pl-hero {
+		padding: 2.5rem 0 2rem;
+		margin-bottom: 2.25rem;
+	}
+
+	.pl-section {
+		margin-bottom: 2.75rem;
+	}
+
+	.pl-heading {
+		font-size: 1.05rem;
+	}
+
+	.pl-body p {
+		font-size: 0.95rem;
+		line-height: 1.9;
+	}
+
+	.pl-prayer {
+		padding: 2rem 1.25rem;
+	}
+}

@@ -1,0 +1,291 @@
+.catechumen {
+	max-width: 860px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+/* ------------------------------- 표제 ------------------------------- */
+.cat-hero {
+	padding: 3.5rem 0 2.5rem;
+	margin-bottom: 3rem;
+	border-bottom: 1px solid #e5e5e5;
+	text-align: center;
+}
+
+.cat-title {
+	margin: 0 0 1.1rem;
+	font-size: clamp(1.6rem, 4vw, 2.1rem);
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.02em;
+}
+
+.cat-lead {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.9;
+	color: #666;
+	word-break: keep-all;
+}
+
+/* ------------------------------ 섹션 ------------------------------ */
+.cat-section {
+	margin-bottom: 3rem;
+}
+
+.cat-heading {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	margin: 0 0 1.25rem;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.01em;
+}
+
+.cat-heading::before {
+	content: "";
+	flex-shrink: 0;
+	width: 4px;
+	height: 18px;
+	border-radius: 2px;
+	background: #111;
+}
+
+/* ------------------------------ 카드 ------------------------------ */
+.cat-card {
+	padding: 1.75rem;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+	background: #fafaf8;
+}
+
+.cat-facts {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.cat-facts li {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem 1.25rem;
+	padding: 0.7rem 0;
+	border-bottom: 1px dashed #e0e0dc;
+}
+
+.cat-facts li:first-child {
+	padding-top: 0;
+}
+
+.cat-facts li:last-child {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+
+.cat-fact-label {
+	flex: 0 0 6.5em;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.cat-fact-value {
+	flex: 1 1 auto;
+	font-size: 0.95rem;
+	line-height: 1.7;
+	color: #444;
+	word-break: keep-all;
+}
+
+.cat-note {
+	margin: 1.25rem 0 0;
+	padding-top: 1rem;
+	border-top: 1px solid #ececE8;
+	font-size: 0.85rem;
+	color: #888;
+}
+
+.cat-note::before {
+	content: "※ ";
+}
+
+/* ------------------------------- 표 ------------------------------- */
+.cat-table-wrap {
+	overflow-x: auto;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+}
+
+.cat-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 0.92rem;
+}
+
+.cat-table th {
+	padding: 0.9rem 1rem;
+	background: #f4f4f1;
+	border-bottom: 1px solid #e3e3df;
+	font-weight: 700;
+	color: #111;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.cat-table td {
+	padding: 1rem;
+	border-bottom: 1px solid #efefec;
+	color: #444;
+	text-align: center;
+	word-break: keep-all;
+}
+
+.cat-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.cat-table tbody tr:hover td {
+	background: #fbfbf9;
+}
+
+.cat-table td strong {
+	font-weight: 700;
+	color: #111;
+}
+
+/* --------------------------- 통신교리 링크 --------------------------- */
+.cat-card-link p {
+	margin: 0 0 1.25rem;
+	font-size: 0.95rem;
+	line-height: 1.8;
+	color: #444;
+	word-break: keep-all;
+}
+
+.cat-link-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.7rem 1.35rem;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.cat-link-btn:hover {
+	background: #333;
+}
+
+.cat-link-btn svg {
+	transition: transform 0.15s ease;
+}
+
+.cat-link-btn:hover svg {
+	transform: translateX(2px);
+}
+
+/* ------------------------------ 문의 ------------------------------ */
+.cat-contact {
+	margin-top: 3.5rem;
+	padding: 2rem 1.5rem;
+	border-top: 1px solid #e5e5e5;
+	text-align: center;
+}
+
+.cat-contact-title {
+	margin: 0 0 0.6rem;
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #999;
+	letter-spacing: 0.06em;
+}
+
+.cat-contact p {
+	margin: 0 0 0.9rem;
+	font-size: 0.92rem;
+	color: #666;
+}
+
+.cat-tel {
+	display: inline-block;
+	font-size: 1.35rem;
+	font-weight: 700;
+	color: #111;
+	text-decoration: none;
+	letter-spacing: -0.01em;
+}
+
+.cat-tel:hover {
+	text-decoration: underline;
+}
+
+/* ----------------------------- 반응형 ----------------------------- */
+@media (max-width: 600px) {
+	.cat-hero {
+		padding: 2.5rem 0 2rem;
+		margin-bottom: 2.25rem;
+	}
+
+	.cat-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.cat-card {
+		padding: 1.35rem;
+	}
+
+	/* 표를 카드형으로 전환 */
+	.cat-table-wrap {
+		border: 0;
+		border-radius: 0;
+		overflow: visible;
+	}
+
+	.cat-table,
+	.cat-table tbody,
+	.cat-table tr,
+	.cat-table td {
+		display: block;
+		width: 100%;
+	}
+
+	.cat-table thead {
+		display: none;
+	}
+
+	.cat-table tbody tr {
+		margin-bottom: 0.85rem;
+		border: 1px solid #e8e8e4;
+		border-radius: 10px;
+		overflow: hidden;
+	}
+
+	.cat-table tbody tr:last-child {
+		margin-bottom: 0;
+	}
+
+	.cat-table td {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		padding: 0.75rem 1rem;
+		text-align: right;
+		border-bottom: 1px solid #f0f0ed;
+	}
+
+	.cat-table td::before {
+		content: attr(data-label);
+		flex-shrink: 0;
+		font-size: 0.82rem;
+		font-weight: 700;
+		color: #888;
+		text-align: left;
+	}
+}
