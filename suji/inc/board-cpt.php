@@ -12,6 +12,9 @@ function suji_register_board_post_type() {
 			'edit_item'     => __( '게시판 글 수정', 'suji' ),
 			'search_items'  => __( '게시판 글 검색', 'suji' ),
 			'not_found'     => __( '게시글이 없습니다', 'suji' ),
+			// 외모 > 메뉴 화면에서 아카이브 항목에 붙는 이름
+			'archives'      => __( '전체 게시판 목록', 'suji' ),
+			'all_items'     => __( '모든 게시판 글', 'suji' ),
 		),
 		'public'       => true,
 		'has_archive'  => 'board-list',
@@ -26,6 +29,7 @@ function suji_register_board_post_type() {
 		'labels' => array(
 			'name'          => __( '게시판', 'suji' ),
 			'singular_name' => __( '게시판', 'suji' ),
+			'all_items'     => __( '모든 게시판', 'suji' ),
 		),
 		'public'            => true,
 		'hierarchical'      => true,
@@ -35,6 +39,27 @@ function suji_register_board_post_type() {
 	) );
 }
 add_action( 'init', 'suji_register_board_post_type' );
+
+/**
+ * 외모 > 메뉴 화면에서 게시판 상자를 기본으로 펼쳐 둔다.
+ *
+ * 워드프레스는 그 화면의 부가 상자(사용자 지정 글 타입 · 분류)를 기본으로
+ * 접어두기 때문에, '화면 옵션'을 열어 직접 켜지 않으면 게시판이나 아카이브를
+ * 메뉴에 넣을 수 없었다.
+ */
+function suji_show_board_nav_menu_boxes( $hidden, $screen ) {
+	if ( empty( $screen->id ) || 'nav-menus' !== $screen->id ) {
+		return $hidden;
+	}
+
+	$suji_show = array(
+		'add-post-type-board_post',   // 게시판 글 + 전체 게시판 목록(아카이브)
+		'add-board_cat',              // 게시판별 목록
+	);
+
+	return array_values( array_diff( (array) $hidden, $suji_show ) );
+}
+add_filter( 'hidden_meta_boxes', 'suji_show_board_nav_menu_boxes', 10, 2 );
 
 function suji_board_post_meta( $key, $post_id = 0 ) {
 	$post_id = $post_id ? $post_id : get_the_ID();
