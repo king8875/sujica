@@ -286,6 +286,17 @@ function suji_import_ajax_scan() {
 		}
 	}
 
+	// 사진이 실제로 들어 있는 게시판을 앞으로 — 포토앨범만 본문에 사진이 있고
+	// 공지·주보는 대부분 없다. 순서를 안 바꾸면 '새 사진 없음' 만 1,300줄 지나간다.
+	usort( $suji_enrich, function ( $a, $b ) {
+		$suji_rank = function ( $bo ) {
+			if ( 'gallery' === $bo ) { return 0; }
+			if ( 'notice' === $bo ) { return 1; }
+			return 2;
+		};
+		return $suji_rank( $a['bo'] ) <=> $suji_rank( $b['bo'] );
+	} );
+
 	update_option( SUJI_IMPORT_QUEUE, $suji_queue, false );
 	update_option( SUJI_IMPORT_ENRICH, $suji_enrich, false );
 	update_option( SUJI_IMPORT_SCAN, $suji_at + 1, false );

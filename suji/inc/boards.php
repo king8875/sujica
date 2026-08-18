@@ -182,3 +182,81 @@ function suji_maybe_flush_board_rewrites() {
 	update_option( 'suji_boards_rewrite_sig', $suji_sig, false );
 }
 add_action( 'init', 'suji_maybe_flush_board_rewrites', 99 );
+
+/**
+ * 예전 주소를 새 주소로 넘긴다.
+ *
+ * 게시판을 글 타입으로 나누기 전에는 목록이 /board/{슬러그}/ (분류 archive),
+ * 글이 /entry/{제목}/ 이었다. board_cat 분류는 이제 단체 게시판에만 붙어 있어
+ * /board/notice/ 같은 주소는 글이 0건인 빈 화면이 된다. 메뉴에 그 주소가
+ * 들어가 있거나 링크를 공유한 경우가 있으므로 301 로 넘긴다.
+ */
+function suji_redirect_legacy_urls() {
+	// 목록: /board/{슬러그}/ -> 해당 게시판 목록
+	if ( is_tax( 'board_cat' ) ) {
+		$suji_term = get_queried_object();
+		if ( empty( $suji_term->slug ) ) {
+			return;
+		}
+
+		$suji_group_type = '';
+
+		foreach ( suji_boards() as $suji_type => $suji_board ) {
+			// 단체 게시판은 위원회별 목록(/board/sangim/ 등)을 그대로 쓴다
+			if ( ! empty( $suji_board['taxonomy'] ) ) {
+				$suji_group_type = $suji_type;
+				if ( in_array( $suji_term->slug, $suji_board['from'], true ) ) {
+					return;
+				}
+				continue;
+			}
+
+			if ( in_array( $suji_term->slug, $suji_board['from'], true ) ) {
+				$suji_to = get_post_type_archive_link( $suji_type );
+				if ( $suji_to ) {
+					wp_safe_redirect( $suji_to, 301 );
+					exit;
+				}
+			}
+		}
+
+		// 위원회도 아니고 옮겨간 게시판도 아닌 텀(예: 묶음용으로 만든 'groups')
+		if ( $suji_group_type ) {
+			$suji_to = get_post_type_archive_link( $suji_group_type );
+			if ( $suji_to ) {
+				wp_safe_redirect( $suji_to, 301 );
+				exit;
+			}
+		}
+		return;
+	}
+
+	// 글: /entry/{제목}/ -> 옮겨간 글
+	if ( ! is_404() ) {
+		return;
+	}
+
+	$suji_path = trim( parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ) ?: '', '/' );
+	if ( 0 !== strpos( $suji_path, 'entry/' ) ) {
+		return;
+	}
+
+	$suji_slug = sanitize_title( basename( $suji_path ) );
+	if ( ! $suji_slug ) {
+		return;
+	}
+
+	$suji_found = get_posts( array(
+		'post_type'      => suji_board_post_types(),
+		'name'           => $suji_slug,
+		'posts_per_page' => 1,
+		'post_status'    => 'publish',
+		'fields'         => 'ids',
+	) );
+
+	if ( $suji_found ) {
+		wp_safe_redirect( get_permalink( $suji_found[0] ), 301 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'suji_redirect_legacy_urls' );
