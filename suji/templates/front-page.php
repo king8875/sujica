@@ -6,17 +6,25 @@ if (!defined('ABSPATH')) {
 get_header();
 
 
-$suji_gallery = get_posts(array(
-        'post_type' => 'board_post',
-        'posts_per_page' => 6,
-        'tax_query' => array(
-                array(
-                        'taxonomy' => 'board_cat',
-                        'field' => 'slug',
-                        'terms' => 'gallery',
-                ),
-        ),
-));
+/**
+ * 홈에 띄울 게시판 — 슬러그, 표시 이름, 짧은 설명.
+ */
+$suji_home_boards = array(
+        array( 'slug' => 'notice', 'title' => '공지사항', 'desc' => '본당의 소식과 안내' ),
+        array( 'slug' => 'bible', 'title' => '본당 주보', 'desc' => '주일마다 발행되는 주보' ),
+        array( 'slug' => 'story', 'title' => '사제 게시판', 'desc' => '신부님이 전하는 이야기' ),
+);
+
+$suji_gallery = suji_board_recent( 'gallery', 6 );
+
+// 최근 글에 사진이 하나도 없으면 썸네일 격자 대신 목록으로 그린다.
+$suji_gallery_has_thumb = false;
+foreach ( $suji_gallery as $suji_post ) {
+        if ( suji_first_image_from_content( $suji_post->post_content ) ) {
+                $suji_gallery_has_thumb = true;
+                break;
+        }
+}
 ?>
 
     <main id="primary" class="site-main front-page">
@@ -136,20 +144,80 @@ $suji_gallery = get_posts(array(
             </div>
 
 
+            <!-- ------------------------------ 본당 소식 ------------------------------ -->
+            <section class="home-section home-boards">
+                <?php foreach ($suji_home_boards as $suji_board) : ?>
+                    <?php
+                    $suji_posts = suji_board_recent($suji_board['slug'], 5);
+                    $suji_link = suji_board_link($suji_board['slug']);
+                    ?>
+                    <div class="home-board">
+                        <div class="home-board-head">
+                            <h2 class="home-board-title"><?php echo esc_html($suji_board['title']); ?></h2>
+                            <?php if ($suji_link) : ?>
+                                <a class="home-board-more" href="<?php echo esc_url($suji_link); ?>">
+                                    <span class="screen-reader-text"><?php echo esc_html($suji_board['title']); ?> </span>더보기
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <polyline points="9 6 15 12 9 18"></polyline>
+                                    </svg>
+                                </a>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if ($suji_posts) : ?>
+                            <ul class="home-board-list">
+                                <?php foreach ($suji_posts as $suji_post) : ?>
+                                    <li>
+                                        <a href="<?php echo esc_url(get_permalink($suji_post)); ?>">
+                                            <span class="home-board-post-title"><?php echo esc_html(get_the_title($suji_post)); ?></span>
+                                            <time class="home-board-date"
+                                                  datetime="<?php echo esc_attr(get_the_date('c', $suji_post)); ?>"><?php echo esc_html(get_the_date('Y.m.d', $suji_post)); ?></time>
+                                        </a>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        <?php else : ?>
+                            <p class="home-board-empty"><?php esc_html_e('아직 등록된 글이 없습니다.', 'suji'); ?></p>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </section>
+
+            <!-- ------------------------------ 포토앨범 ------------------------------ -->
             <?php if ($suji_gallery) : ?>
+                <?php $suji_gallery_link = suji_board_link('gallery'); ?>
                 <section class="home-section home-gallery">
-                    <h2><?php esc_html_e('포토앨범', 'suji'); ?></h2>
-                    <ul class="home-gallery-grid">
-                        <?php foreach ($suji_gallery as $suji_post) : setup_postdata($suji_post); ?>
+                    <div class="home-board-head">
+                        <h2 class="home-board-title"><?php esc_html_e('포토앨범', 'suji'); ?></h2>
+                        <?php if ($suji_gallery_link) : ?>
+                            <a class="home-board-more" href="<?php echo esc_url($suji_gallery_link); ?>">
+                                더보기
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <polyline points="9 6 15 12 9 18"></polyline>
+                                </svg>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+
+                    <ul class="<?php echo $suji_gallery_has_thumb ? 'home-gallery-grid' : 'home-gallery-list'; ?>">
+                        <?php foreach ($suji_gallery as $suji_post) : ?>
+                            <?php $suji_thumb = suji_first_image_from_content($suji_post->post_content); ?>
                             <li>
-                                <a href="<?php echo esc_url(get_permalink($suji_post)); ?>"><?php echo esc_html(get_the_title($suji_post)); ?></a>
+                                <a href="<?php echo esc_url(get_permalink($suji_post)); ?>">
+                                    <?php if ($suji_gallery_has_thumb) : ?>
+                                        <span class="home-gallery-thumb"<?php echo $suji_thumb ? ' style="background-image:url(\'' . esc_url($suji_thumb) . '\')"' : ''; ?>></span>
+                                    <?php endif; ?>
+                                    <span class="home-gallery-caption">
+                                        <span class="home-gallery-title"><?php echo esc_html(get_the_title($suji_post)); ?></span>
+                                        <time class="home-board-date"
+                                              datetime="<?php echo esc_attr(get_the_date('c', $suji_post)); ?>"><?php echo esc_html(get_the_date('Y.m.d', $suji_post)); ?></time>
+                                    </span>
+                                </a>
                             </li>
-                        <?php endforeach;
-                        wp_reset_postdata(); ?>
+                        <?php endforeach; ?>
                     </ul>
-                    <a class="home-more-link"
-                       href="<?php echo esc_url(get_term_link('gallery', 'board_cat')); ?>"><?php esc_html_e('더보기', 'suji'); ?>
-                        &rarr;</a>
                 </section>
             <?php endif; ?>
         </div>

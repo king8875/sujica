@@ -182,68 +182,269 @@
 	color: #555;
 }
 
+/* ------------------------------ 홈 섹션 ------------------------------ */
 .home-section {
-	margin-bottom: 2.5rem;
+	margin-bottom: 3.5rem;
 }
 
-.home-section h2 {
-	font-size: 1.25rem;
-	border-bottom: 2px solid #222;
-	padding-bottom: 0.5rem;
+.home-section:last-child {
+	margin-bottom: 0;
+}
+
+.home-board-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
 	margin-bottom: 1rem;
+	padding-bottom: 0.7rem;
+	border-bottom: 2px solid #111;
 }
 
-.home-columns {
+.home-board-title {
+	margin: 0;
+	font-size: 1.05rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.01em;
+}
+
+.home-board-more {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.2rem;
+	flex-shrink: 0;
+	font-size: 0.82rem;
+	color: #888;
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+.home-board-more:hover {
+	color: #111;
+}
+
+.home-board-more svg {
+	transition: transform 0.15s ease;
+}
+
+.home-board-more:hover svg {
+	transform: translateX(2px);
+}
+
+/* ------------------------------ 본당 소식 ------------------------------ */
+/* 공지사항 · 본당 주보 · 사제 게시판을 나란히 둔다. */
+.home-boards {
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 2rem;
 }
 
-@media (max-width: 640px) {
-	.home-columns {
-		grid-template-columns: 1fr;
+.home-board {
+	min-width: 0;
+}
+
+.home-board-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.home-board-list li + li {
+	border-top: 1px solid #f0f0ec;
+}
+
+.home-board-list a {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.7rem 0;
+	color: #333;
+	text-decoration: none;
+	transition: color 0.15s ease;
+}
+
+.home-board-list a:hover {
+	color: #111;
+}
+
+.home-board-post-title {
+	flex: 1 1 auto;
+	min-width: 0;
+	font-size: 0.9rem;
+	line-height: 1.5;
+	/* 제목이 길어도 한 줄로 잘라 목록 높이를 고르게 둔다 */
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.home-board-list a:hover .home-board-post-title {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.home-board-date {
+	flex-shrink: 0;
+	font-size: 0.78rem;
+	color: #aaa;
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+.home-board-empty {
+	margin: 0;
+	padding: 1.25rem 0;
+	font-size: 0.88rem;
+	color: #999;
+}
+
+/* ------------------------------ 포토앨범 ------------------------------ */
+/* 사진이 있는 글이 있을 때만 격자로, 없으면 아래 목록형으로 그린다. */
+.home-gallery-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 1.25rem 1rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.home-gallery-grid a {
+	display: flex;
+	flex-direction: column;
+	gap: 0.6rem;
+	color: inherit;
+	text-decoration: none;
+}
+
+.home-gallery-thumb {
+	display: block;
+	aspect-ratio: 4 / 3;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+	background: #f4f4f1 center / cover no-repeat;
+	transition: border-color 0.15s ease;
+}
+
+.home-gallery-grid a:hover .home-gallery-thumb {
+	border-color: #111;
+}
+
+.home-gallery-caption {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	min-width: 0;
+}
+
+.home-gallery-title {
+	font-size: 0.88rem;
+	font-weight: 600;
+	line-height: 1.45;
+	color: #111;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* 사진이 아직 없을 때 — 빈 썸네일 대신 제목 목록으로 */
+.home-gallery-list {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0 2rem;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.home-gallery-list li {
+	border-top: 1px solid #f0f0ec;
+}
+
+.home-gallery-list li:nth-child(-n + 3) {
+	border-top: 0;
+}
+
+.home-gallery-list a {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	padding: 0.7rem 0;
+	color: #333;
+	text-decoration: none;
+}
+
+.home-gallery-list .home-gallery-title {
+	flex: 1 1 auto;
+	min-width: 0;
+	font-weight: 400;
+	font-size: 0.9rem;
+	color: #333;
+}
+
+.home-gallery-list a:hover .home-gallery-title {
+	color: #111;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.home-gallery-list .home-gallery-caption {
+	flex: 1 1 auto;
+	flex-direction: row;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 1rem;
+	min-width: 0;
+}
+
+/* ------------------------------ 반응형 ------------------------------ */
+@media (max-width: 900px) {
+	.home-boards {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 2rem 1.75rem;
+	}
+
+	.home-gallery-list {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.home-gallery-list li:nth-child(-n + 3) {
+		border-top: 1px solid #f0f0ec;
+	}
+
+	.home-gallery-list li:nth-child(-n + 2) {
+		border-top: 0;
 	}
 }
 
-.home-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
+@media (max-width: 640px) {
+	.home-section {
+		margin-bottom: 2.5rem;
+	}
 
-.home-list li {
-	display: flex;
-	justify-content: space-between;
-	gap: 1rem;
-	padding: 0.5rem 0;
-	border-bottom: 1px solid #eee;
-}
+	.home-boards,
+	.home-gallery-list {
+		grid-template-columns: 1fr;
+		gap: 2rem;
+	}
 
-.home-list-date {
-	color: #999;
-	white-space: nowrap;
-	font-size: 0.85rem;
-}
+	.home-gallery-list {
+		gap: 0;
+	}
 
-.home-gallery-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 0.75rem;
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
+	.home-gallery-list li:nth-child(-n + 3),
+	.home-gallery-list li:nth-child(-n + 2) {
+		border-top: 1px solid #f0f0ec;
+	}
 
-.home-gallery-grid li a {
-	display: block;
-	padding: 1rem 0.5rem;
-	background: #f5f5f5;
-	text-align: center;
-	border-radius: 4px;
-}
+	.home-gallery-list li:first-child {
+		border-top: 0;
+	}
 
-.home-more-link {
-	display: inline-block;
-	margin-top: 0.75rem;
-	font-size: 0.9rem;
+	.home-gallery-grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
 }

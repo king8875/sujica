@@ -49,6 +49,34 @@ function suji_first_image_from_content( $content ) {
 }
 
 /**
+ * 한 게시판(board_cat 슬러그)의 최근 글을 가져온다.
+ * 홈 화면의 소식 섹션에서 쓴다.
+ */
+function suji_board_recent( $suji_slug, $suji_count = 5 ) {
+	return get_posts( array(
+		'post_type'        => 'board_post',
+		'posts_per_page'   => $suji_count,
+		'ignore_sticky_posts' => true,
+		'no_found_rows'    => true,
+		'tax_query'        => array(
+			array(
+				'taxonomy' => 'board_cat',
+				'field'    => 'slug',
+				'terms'    => $suji_slug,
+			),
+		),
+	) );
+}
+
+/**
+ * board_cat 슬러그의 아카이브 주소. 텀이 없으면 빈 문자열.
+ */
+function suji_board_link( $suji_slug ) {
+	$suji_link = get_term_link( $suji_slug, 'board_cat' );
+	return is_wp_error( $suji_link ) ? '' : $suji_link;
+}
+
+/**
  * Add a "list" + "write new" admin submenu link per board_cat term under
  * "게시판 글", so each board behaves like its own separately managed section:
  * clicking its list shows only that board's posts, and its "글쓰기" link opens
