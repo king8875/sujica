@@ -1,0 +1,283 @@
+.patron-saint {
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+/* ------------------------------- 표제 ------------------------------- */
+.ps-hero {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 2.5rem;
+	padding: 3.5rem 0 2.5rem;
+	margin-bottom: 3rem;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+.ps-portrait {
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+.ps-portrait img {
+	display: block;
+	width: 177px;
+	max-width: 100%;
+	height: auto;
+	border-radius: 10px;
+}
+
+.ps-hero-text {
+	flex: 1 1 22rem;
+	min-width: 0;
+}
+
+.ps-eyebrow {
+	margin: 0 0 0.5rem;
+	font-size: 0.82rem;
+	font-weight: 700;
+	color: #999;
+	letter-spacing: 0.06em;
+}
+
+.ps-name {
+	margin: 0 0 0.35rem;
+	font-size: clamp(1.6rem, 4vw, 2.1rem);
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.02em;
+	word-break: keep-all;
+}
+
+.ps-name-en {
+	margin: 0 0 1.75rem;
+	font-size: 0.92rem;
+	color: #888;
+	letter-spacing: 0.01em;
+}
+
+/* 생애 요약 */
+/* 항목이 4개라 2x2 로 두면 줄바꿈 없이 균형이 맞는다 */
+.ps-summary {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0 2.5rem;
+	margin: 0;
+}
+
+.ps-summary-item {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.3rem 1rem;
+	padding: 0.65rem 0;
+	border-bottom: 1px dashed #e4e4de;
+}
+
+.ps-summary-item dt {
+	flex: 0 0 4.5em;
+	font-size: 0.85rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.ps-summary-item dd {
+	flex: 1 1 8rem;
+	margin: 0;
+	font-size: 0.9rem;
+	line-height: 1.6;
+	color: #444;
+	word-break: keep-all;
+}
+
+.ps-hanja,
+.ps-summary-sub {
+	font-size: 0.8rem;
+	color: #8a8a84;
+}
+
+.ps-summary-sub::before {
+	content: "· ";
+}
+
+/* ------------------------------ 본문 ------------------------------ */
+.ps-chapter {
+	margin-bottom: 3.5rem;
+}
+
+.ps-chapter-title {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	margin: 0 0 1.25rem;
+	font-size: 1.1rem;
+	font-weight: 700;
+	color: #111;
+	letter-spacing: -0.01em;
+	word-break: keep-all;
+}
+
+.ps-numeral {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background: #111;
+	color: #fff;
+	font-size: 0.82rem;
+	font-weight: 700;
+}
+
+/* 긴 전기라 본문은 읽기 좋은 폭으로 제한한다 */
+.ps-chapter p {
+	max-width: 46rem;
+	margin: 0 0 1.1rem;
+	font-size: 0.97rem;
+	line-height: 2;
+	color: #333;
+	word-break: keep-all;
+}
+
+.ps-chapter p:last-child {
+	margin-bottom: 0;
+}
+
+/* ---------------------------- 인용 ---------------------------- */
+.ps-quote {
+	max-width: 46rem;
+	margin: 1.75rem 0;
+	padding: 1.5rem 1.75rem;
+	border-left: 3px solid #111;
+	border-radius: 0 10px 10px 0;
+	background: #fafaf8;
+}
+
+.ps-quote p {
+	margin: 0;
+	font-size: 0.95rem;
+	line-height: 1.95;
+	color: #333;
+	word-break: keep-all;
+}
+
+.ps-quote footer {
+	margin-top: 0.85rem;
+	font-size: 0.82rem;
+	color: #999;
+}
+
+.ps-quote footer::before {
+	content: "— ";
+}
+
+/* ------------------------- 유해 사진이 있는 장 ------------------------- */
+.ps-chapter-split {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	gap: 2.5rem;
+}
+
+.ps-chapter-split-text {
+	flex: 1 1 26rem;
+	min-width: 0;
+}
+
+.ps-relic {
+	flex: 0 0 auto;
+	margin: 0;
+	text-align: center;
+}
+
+.ps-relic img {
+	display: block;
+	width: 193px;
+	max-width: 100%;
+	height: auto;
+	border-radius: 10px;
+}
+
+.ps-relic figcaption {
+	margin-top: 0.6rem;
+	font-size: 0.82rem;
+	color: #999;
+}
+
+/* ---------------------------- 순교 여정 지도 ---------------------------- */
+.ps-cta {
+	padding-top: 2.5rem;
+	border-top: 1px solid #e5e5e5;
+	text-align: center;
+}
+
+.ps-cta-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.55rem;
+	padding: 0.8rem 1.6rem;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-size: 0.92rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.ps-cta-link:hover {
+	background: #333;
+	color: #fff;
+}
+
+/* ------------------------------ 반응형 ------------------------------ */
+@media (max-width: 900px) {
+	.ps-summary {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+}
+
+@media (max-width: 600px) {
+	.ps-hero {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1.75rem;
+		padding: 2.5rem 0 2rem;
+		margin-bottom: 2.25rem;
+	}
+
+	.ps-portrait {
+		align-self: center;
+	}
+
+	.ps-chapter {
+		margin-bottom: 2.5rem;
+	}
+
+	.ps-summary-item dt {
+		flex: 0 0 100%;
+		font-size: 0.8rem;
+		color: #888;
+	}
+
+	.ps-quote {
+		padding: 1.25rem 1.35rem;
+	}
+
+	.ps-chapter-split {
+		gap: 1.75rem;
+	}
+
+	.ps-relic {
+		align-self: center;
+		width: 100%;
+	}
+
+	.ps-cta-link {
+		width: 100%;
+		justify-content: center;
+	}
+}
