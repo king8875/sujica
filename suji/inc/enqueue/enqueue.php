@@ -46,6 +46,10 @@ function suji_enqueue_assets() {
 		wp_enqueue_style( 'suji-bible-study', SUJI_URI . '/assets/css/pages/bible-study.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/bible-study.css' ) );
 	}
 
+	if ( is_page( 'parish-about' ) ) {
+		wp_enqueue_style( 'suji-parish-about', SUJI_URI . '/assets/css/pages/parish-about.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/parish-about.css' ) );
+	}
+
 	if ( is_tax( 'board_cat' ) || is_search() ) {
 		wp_enqueue_style( 'suji-board-archive', SUJI_URI . '/assets/css/pages/board-archive.css', array( 'suji-board-post' ), suji_asset_version( '/assets/css/pages/board-archive.css' ) );
 	}
