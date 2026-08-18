@@ -72,6 +72,10 @@
 	background: #92400e;
 }
 
+.board-archive-generic .board-archive-icon {
+	background: #64748b;
+}
+
 .board-archive-committee-board .board-archive-icon {
 	background: #0d9488;
 }

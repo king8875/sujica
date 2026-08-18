@@ -19,4 +19,5 @@ require SUJI_DIR . '/inc/customizer/customizer.php';
 if ( is_admin() ) {
 	require SUJI_DIR . '/inc/admin/admin.php';
 	require SUJI_DIR . '/inc/admin/seed-clergy.php';
+	require SUJI_DIR . '/inc/admin/board-setup.php';
 }
