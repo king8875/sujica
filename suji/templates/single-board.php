@@ -1,4 +1,7 @@
 <?php
+/**
+ * 게시판 글 상세.
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }

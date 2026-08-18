@@ -29,38 +29,28 @@ function suji_page_slug_template( $template ) {
 add_filter( 'template_include', 'suji_page_slug_template' );
 
 /**
- * Auto-load templates/archive/archive-{name}.php for specific board_cat
- * terms, so each listed board can have its own dedicated archive design.
- * Terms not in the map keep using the generic taxonomy-board_cat.php.
+ * 게시판 글 타입의 목록 · 상세 · 위원회별 목록을 templates/ 아래 파일로 보낸다.
+ * 테마 루트에 글 타입마다 빈 파일을 두지 않기 위해 여기서 한 번에 처리한다.
  */
-function suji_board_archive_template( $template ) {
-	if ( ! is_tax( 'board_cat' ) ) {
-		return $template;
+function suji_board_template( $template ) {
+	// 이관 전 글(board_post)도 같은 화면으로 보여 준다
+	$suji_types = array_merge( suji_board_post_types(), array( 'board_post' ) );
+
+	// 포토앨범 목록은 사진 격자
+	if ( is_post_type_archive( 'suji_gallery' ) ) {
+		return SUJI_DIR . '/templates/archive-gallery.php';
 	}
 
-	$suji_term = get_queried_object();
-	if ( empty( $suji_term->slug ) ) {
-		return $template;
+	// 나머지 게시판 목록 + 위원회별 목록
+	if ( is_post_type_archive( $suji_types ) || is_tax( 'board_cat' ) ) {
+		return SUJI_DIR . '/templates/archive-board.php';
 	}
 
-	$suji_archive_map = array(
-		'notice' => 'notice',
-		'bible'  => 'bulletin',
-		'gallery' => 'gallery',
-		'story'  => 'priest-board',
-		'sangim' => 'committee-board',
-	);
-
-	if ( ! isset( $suji_archive_map[ $suji_term->slug ] ) ) {
-		return $template;
-	}
-
-	$suji_candidate = SUJI_DIR . '/templates/archive/archive-' . $suji_archive_map[ $suji_term->slug ] . '.php';
-
-	if ( file_exists( $suji_candidate ) ) {
-		return $suji_candidate;
+	// 게시판 글 상세
+	if ( is_singular( $suji_types ) ) {
+		return SUJI_DIR . '/templates/single-board.php';
 	}
 
 	return $template;
 }
-add_filter( 'template_include', 'suji_board_archive_template' );
+add_filter( 'template_include', 'suji_board_template' );

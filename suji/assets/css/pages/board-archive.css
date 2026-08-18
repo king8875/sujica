@@ -277,3 +277,81 @@
 		padding: 3rem 0.5rem 4rem;
 	}
 }
+
+/* ---------------------------- 글이 없을 때 ---------------------------- */
+.board-empty {
+	padding: 4rem 1.5rem;
+	text-align: center;
+}
+
+.board-empty-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 64px;
+	height: 64px;
+	margin-bottom: 1rem;
+	border-radius: 50%;
+	background: #f4f4f1;
+	color: #b8b8b0;
+}
+
+.board-empty-title {
+	margin: 0;
+	font-size: 0.98rem;
+	font-weight: 600;
+	color: #888;
+}
+
+/* --------------------------- 위원회 고르기 --------------------------- */
+.board-filter {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+	margin-bottom: 1.75rem;
+}
+
+.board-filter-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.35rem;
+	padding: 0.42rem 0.85rem;
+	border: 1px solid #e0e0da;
+	border-radius: 999px;
+	background: #fff;
+	color: #555;
+	font-size: 0.84rem;
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+.board-filter-link:hover {
+	border-color: #111;
+	color: #111;
+}
+
+.board-filter-link.is-current {
+	border-color: #111;
+	background: #111;
+	color: #fff;
+}
+
+.board-filter-count {
+	font-size: 0.74rem;
+	font-weight: 400;
+	opacity: 0.55;
+}
+
+@media (max-width: 600px) {
+	.board-filter {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.board-filter::-webkit-scrollbar {
+		display: none;
+	}
+}

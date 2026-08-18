@@ -1,19 +1,18 @@
 <?php
+/**
+ * 글이 없을 때.
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<section class="no-results not-found">
-	<header class="page-header">
-		<h1 class="page-title"><?php esc_html_e( 'Nothing Found', 'suji' ); ?></h1>
-	</header>
-
-	<div class="page-content">
-		<?php if ( is_search() ) : ?>
-			<p><?php esc_html_e( 'Sorry, nothing matched your search terms.', 'suji' ); ?></p>
-			<?php get_search_form(); ?>
-		<?php else : ?>
-			<p><?php esc_html_e( 'It looks like nothing was found here.', 'suji' ); ?></p>
-		<?php endif; ?>
-	</div>
-</section>
+<div class="board-empty">
+	<span class="board-empty-icon" aria-hidden="true">
+		<svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="currentColor"
+		     stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+			<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
+			<path d="M14 3v5h5"></path>
+		</svg>
+	</span>
+	<p class="board-empty-title"><?php esc_html_e( '등록된 글이 없습니다', 'suji' ); ?></p>
+</div>

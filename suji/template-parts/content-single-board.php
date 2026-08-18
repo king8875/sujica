@@ -5,19 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $suji_wr_name = suji_board_post_meta( '_g5_wr_name' );
 $suji_wr_hit  = suji_board_post_meta( '_g5_wr_hit' );
-$suji_terms   = get_the_terms( get_the_ID(), 'board_cat' );
-$suji_board   = ( $suji_terms && ! is_wp_error( $suji_terms ) ) ? $suji_terms[0] : null;
+$suji_label   = suji_board_label();
+$suji_archive = suji_board_link( get_post_type() );
 
-// 같은 게시판 안에서의 이전 / 다음 글
-$suji_prev = $suji_board ? get_previous_post( true, '', 'board_cat' ) : null;
-$suji_next = $suji_board ? get_next_post( true, '', 'board_cat' ) : null;
+// 같은 게시판 안에서의 이전 / 다음 글 (글 타입이 곧 게시판이다)
+$suji_prev = get_previous_post();
+$suji_next = get_next_post();
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'board-single' ); ?>>
 
 	<header class="board-single-header">
-		<?php if ( $suji_board ) : ?>
-			<a class="board-single-cat" href="<?php echo esc_url( get_term_link( $suji_board ) ); ?>">
-				<?php echo esc_html( $suji_board->name ); ?>
+		<?php if ( $suji_archive ) : ?>
+			<a class="board-single-cat" href="<?php echo esc_url( $suji_archive ); ?>">
+				<?php echo esc_html( $suji_label ); ?>
 			</a>
 		<?php endif; ?>
 
@@ -80,16 +80,16 @@ $suji_next = $suji_board ? get_next_post( true, '', 'board_cat' ) : null;
 		</nav>
 	<?php endif; ?>
 
-	<?php if ( $suji_board ) : ?>
+	<?php if ( $suji_archive ) : ?>
 		<footer class="board-single-footer">
-			<a class="board-back-link" href="<?php echo esc_url( get_term_link( $suji_board ) ); ?>">
+			<a class="board-back-link" href="<?php echo esc_url( $suji_archive ); ?>">
 				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
 				     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 					<line x1="3" y1="6" x2="17" y2="6"></line>
 					<line x1="3" y1="12" x2="17" y2="12"></line>
 					<line x1="3" y1="18" x2="13" y2="18"></line>
 				</svg>
-				<?php echo esc_html( $suji_board->name ); ?> <?php esc_html_e( '목록', 'suji' ); ?>
+				<?php echo esc_html( $suji_label ); ?> <?php esc_html_e( '목록', 'suji' ); ?>
 			</a>
 		</footer>
 	<?php endif; ?>

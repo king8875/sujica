@@ -9,13 +9,9 @@ get_header();
 /**
  * 홈에 띄울 게시판 — 슬러그, 표시 이름, 짧은 설명.
  */
-$suji_home_boards = array(
-        array( 'slug' => 'notice', 'title' => '공지사항', 'desc' => '본당의 소식과 안내' ),
-        array( 'slug' => 'bible', 'title' => '본당 주보', 'desc' => '주일마다 발행되는 주보' ),
-        array( 'slug' => 'story', 'title' => '사제 게시판', 'desc' => '신부님이 전하는 이야기' ),
-);
+$suji_home_boards = array( 'suji_notice', 'suji_bulletin', 'suji_story' );
 
-$suji_gallery = suji_board_recent( 'gallery', 6 );
+$suji_gallery = suji_board_recent( 'suji_gallery', 6 );
 
 // 최근 글에 사진이 하나도 없으면 썸네일 격자 대신 목록으로 그린다.
 $suji_gallery_has_thumb = false;
@@ -146,17 +142,18 @@ foreach ( $suji_gallery as $suji_post ) {
 
             <!-- ------------------------------ 본당 소식 ------------------------------ -->
             <section class="home-section home-boards">
-                <?php foreach ($suji_home_boards as $suji_board) : ?>
+                <?php foreach ($suji_home_boards as $suji_type) : ?>
                     <?php
-                    $suji_posts = suji_board_recent($suji_board['slug'], 5);
-                    $suji_link = suji_board_link($suji_board['slug']);
+                    $suji_board = suji_board_of($suji_type);
+                    $suji_posts = suji_board_recent($suji_type, 5);
+                    $suji_link = suji_board_link($suji_type);
                     ?>
                     <div class="home-board">
                         <div class="home-board-head">
-                            <h2 class="home-board-title"><?php echo esc_html($suji_board['title']); ?></h2>
+                            <h2 class="home-board-title"><?php echo esc_html($suji_board['name']); ?></h2>
                             <?php if ($suji_link) : ?>
                                 <a class="home-board-more" href="<?php echo esc_url($suji_link); ?>">
-                                    <span class="screen-reader-text"><?php echo esc_html($suji_board['title']); ?> </span>더보기
+                                    <span class="screen-reader-text"><?php echo esc_html($suji_board['name']); ?> </span>더보기
                                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
                                          stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                         <polyline points="9 6 15 12 9 18"></polyline>
@@ -186,7 +183,7 @@ foreach ( $suji_gallery as $suji_post ) {
 
             <!-- ------------------------------ 포토앨범 ------------------------------ -->
             <?php if ($suji_gallery) : ?>
-                <?php $suji_gallery_link = suji_board_link('gallery'); ?>
+                <?php $suji_gallery_link = suji_board_link('suji_gallery'); ?>
                 <section class="home-section home-gallery">
                     <div class="home-board-head">
                         <h2 class="home-board-title"><?php esc_html_e('포토앨범', 'suji'); ?></h2>

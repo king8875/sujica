@@ -11,17 +11,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $suji_wr_name = suji_board_post_meta( '_g5_wr_name' );
 $suji_wr_hit  = suji_board_post_meta( '_g5_wr_hit' );
-$suji_terms   = get_the_terms( get_the_ID(), 'board_cat' );
-$suji_board   = ( $suji_terms && ! is_wp_error( $suji_terms ) ) ? $suji_terms[0] : null;
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'board-list-item' ); ?>>
 	<a class="board-item-link" href="<?php the_permalink(); ?>">
 		<h2 class="board-item-title"><?php the_title(); ?></h2>
 
 		<div class="board-item-meta">
-			<span class="search-item-board">
-				<?php echo esc_html( $suji_board ? $suji_board->name : get_post_type_object( get_post_type() )->labels->singular_name ); ?>
-			</span>
+			<span class="search-item-board"><?php echo esc_html( suji_board_label() ); ?></span>
 
 			<?php if ( $suji_wr_name ) : ?>
 				<span class="board-item-author"><?php echo esc_html( $suji_wr_name ); ?></span>
