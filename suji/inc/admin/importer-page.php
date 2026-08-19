@@ -199,7 +199,16 @@ function suji_import_ajax_test() {
 	}
 
 	$suji_items = suji_import_parse_list( $suji_body );
-	wp_send_json_success( sprintf( '성공 — 목록에서 %d건을 읽었습니다.', count( $suji_items ) ) );
+	$suji_files = 0;
+	foreach ( $suji_items as $suji_item ) {
+		if ( ! empty( $suji_item['files'] ) ) {
+			$suji_files++;
+		}
+	}
+	wp_send_json_success( sprintf(
+		'성공 — 목록에서 %d건을 읽었습니다. (첨부 있는 글 %d건)',
+		count( $suji_items ), $suji_files
+	) );
 }
 add_action( 'wp_ajax_suji_import_test', 'suji_import_ajax_test' );
 
@@ -257,8 +266,9 @@ function suji_import_ajax_scan() {
 			break;
 		}
 
-		foreach ( $suji_items as $suji_wr_id => $suji_title ) {
-			$suji_key = suji_import_key( $suji_title );
+		foreach ( $suji_items as $suji_wr_id => $suji_item ) {
+			$suji_title = $suji_item['title'];
+			$suji_key   = suji_import_key( $suji_title );
 
 			if ( isset( $suji_index[ $suji_key ] ) ) {
 				$suji_post_id = $suji_index[ $suji_key ];
@@ -270,7 +280,9 @@ function suji_import_ajax_scan() {
 					$suji_linked++;
 				}
 
-				if ( $suji_photos && ! get_post_thumbnail_id( $suji_post_id ) ) {
+				// 사진이 없거나 첨부가 달려 있으면 채우기 대상
+				$suji_need = ( ! get_post_thumbnail_id( $suji_post_id ) ) || ! empty( $suji_item['files'] );
+				if ( $suji_photos && $suji_need ) {
 					$suji_enrich[] = array( 'post' => $suji_post_id, 'bo' => $suji_bo, 'id' => $suji_wr_id );
 					$suji_for_photos++;
 				}
@@ -290,9 +302,10 @@ function suji_import_ajax_scan() {
 	// 공지·주보는 대부분 없다. 순서를 안 바꾸면 '새 사진 없음' 만 1,300줄 지나간다.
 	usort( $suji_enrich, function ( $a, $b ) {
 		$suji_rank = function ( $bo ) {
-			if ( 'gallery' === $bo ) { return 0; }
-			if ( 'notice' === $bo ) { return 1; }
-			return 2;
+			if ( 'gallery' === $bo ) { return 0; }   // 사진이 실제로 들어 있는 곳
+			if ( 'docu' === $bo )    { return 1; }   // 첨부 문서가 많은 곳
+			if ( 'notice' === $bo )  { return 2; }
+			return 3;
 		};
 		return $suji_rank( $a['bo'] ) <=> $suji_rank( $b['bo'] );
 	} );

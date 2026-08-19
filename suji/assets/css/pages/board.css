@@ -308,3 +308,64 @@
 		justify-content: center;
 	}
 }
+
+/* ---------------------------- 첨부파일 목록 ---------------------------- */
+/* 원본 사이트에서 옮겨온 첨부는 본문 끝에 이 목록으로 붙는다. */
+.board-single-content .board-files {
+	margin: 2rem 0 0;
+	padding: 1.25rem 1.5rem;
+	border: 1px solid #e8e8e4;
+	border-radius: 10px;
+	background: #fafaf8;
+	list-style: none;
+}
+
+.board-single-content .board-files::before {
+	content: "첨부파일";
+	display: block;
+	margin-bottom: 0.75rem;
+	font-size: 0.82rem;
+	font-weight: 700;
+	color: #999;
+}
+
+.board-single-content .board-files li {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0.55rem 0;
+	border-top: 1px solid #ececE8;
+}
+
+.board-single-content .board-files li:first-of-type {
+	border-top: 0;
+	padding-top: 0;
+}
+
+.board-single-content .board-files a {
+	font-size: 0.92rem;
+	font-weight: 600;
+	color: #111;
+	text-decoration: none;
+	overflow-wrap: anywhere;
+}
+
+.board-single-content .board-files a::before {
+	content: "↓";
+	margin-right: 0.4rem;
+	color: #aaa;
+	font-weight: 400;
+}
+
+.board-single-content .board-files a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.board-file-size {
+	font-size: 0.78rem;
+	color: #aaa;
+	white-space: nowrap;
+}
