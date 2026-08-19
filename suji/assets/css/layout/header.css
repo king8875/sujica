@@ -117,7 +117,7 @@
 .main-navigation #primary-menu {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 0.35rem;
 }
 
 .main-navigation li {
@@ -130,26 +130,93 @@
     text-decoration: none;
 }
 
+/* ------------------------------ 최상위 ------------------------------ */
+.main-navigation #primary-menu > li > a {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.main-navigation #primary-menu > li > a:hover,
+.main-navigation #primary-menu > li:focus-within > a {
+    background: #f2f2ef;
+}
+
+/* 현재 보고 있는 메뉴 */
+.main-navigation #primary-menu > li.current-menu-item > a,
+.main-navigation #primary-menu > li.current-menu-parent > a,
+.main-navigation #primary-menu > li.current-menu-ancestor > a,
+.main-navigation #primary-menu > li.current_page_parent > a {
+    background: #111;
+    color: #fff;
+}
+
+/* 하위가 있는 항목에는 방향 표시를 붙인다 — 눌러볼 곳인지 알 수 있게 */
+.main-navigation .menu-item-has-children > a::after {
+    content: "";
+    flex-shrink: 0;
+    width: 0.32em;
+    height: 0.32em;
+    margin-left: 0.1em;
+    border-right: 1.6px solid currentColor;
+    border-bottom: 1.6px solid currentColor;
+    transform: rotate(45deg) translate(-0.05em, -0.1em);
+    opacity: 0.45;
+    transition: transform 0.2s ease, opacity 0.15s ease;
+}
+
+.main-navigation #primary-menu > li.menu-item-has-children:hover > a::after,
+.main-navigation #primary-menu > li.menu-item-has-children:focus-within > a::after {
+    opacity: 0.8;
+    transform: rotate(225deg) translate(-0.05em, -0.1em);
+}
+
+/* ----------------------------- 하위 메뉴 ----------------------------- */
 .main-navigation ul.sub-menu {
-    display: none;
     position: absolute;
-    top: 100%;
+    top: calc(100% + 0.5rem);
     left: 0;
     z-index: 100;
+    display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 0;
-    min-width: 200px;
+    min-width: 13rem;
     margin: 0;
-    padding: 0.5rem 0;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    padding: 0.4rem;
+    border: 1px solid #ececE8;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1), 0 2px 6px rgba(0, 0, 0, 0.04);
+
+    /* display 를 바꾸는 대신 서서히 나타나게 한다 */
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
+}
+
+/* 방아쇠와 메뉴 사이의 빈틈에서도 hover 가 끊기지 않도록 다리를 놓는다 */
+.main-navigation ul.sub-menu::before {
+    content: "";
+    position: absolute;
+    top: -0.6rem;
+    left: 0;
+    right: 0;
+    height: 0.6rem;
 }
 
 .main-navigation li:hover > ul.sub-menu,
 .main-navigation li:focus-within > ul.sub-menu {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .main-navigation .sub-menu li {
@@ -157,18 +224,56 @@
 }
 
 .main-navigation .sub-menu a {
-    padding: 0.6rem 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.92rem;
+    color: #333;
     white-space: nowrap;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.main-navigation .sub-menu a:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+.main-navigation .sub-menu a:hover,
+.main-navigation .sub-menu li:focus-within > a {
+    background: #f4f4f1;
+    color: #111;
     text-decoration: none;
 }
 
+.main-navigation .sub-menu .current-menu-item > a {
+    color: #111;
+    font-weight: 700;
+}
+
+/* ---------------------------- 2단 하위 메뉴 ---------------------------- */
 .main-navigation .sub-menu .sub-menu {
-    top: -0.5rem;
-    left: 100%;
+    top: -0.4rem;
+    /* 1단과 살짝 겹쳐 두면 마우스가 지나갈 때 끊기지 않는다 */
+    left: calc(100% - 0.25rem);
+    transform: translateX(-6px);
+}
+
+.main-navigation .sub-menu li:hover > .sub-menu,
+.main-navigation .sub-menu li:focus-within > .sub-menu {
+    transform: translateX(0);
+}
+
+.main-navigation .sub-menu ::before {
+    display: none;
+}
+
+/* 2단을 가진 항목은 화살표를 오른쪽으로 */
+.main-navigation .sub-menu .menu-item-has-children > a::after {
+    transform: rotate(-45deg) translate(-0.05em, 0);
+}
+
+.main-navigation .sub-menu .menu-item-has-children:hover > a::after,
+.main-navigation .sub-menu .menu-item-has-children:focus-within > a::after {
+    opacity: 0.8;
+    transform: rotate(-45deg) translate(0.1em, 0);
 }
 
 .header-actions {
@@ -208,6 +313,56 @@
 .header-link-signup:hover {
     background-color: #333;
     color: #fff;
+}
+
+/* 좁은 화면에서는 하위 메뉴가 화면 밖으로 나가지 않도록 오른쪽에 붙인다 */
+@media (max-width: 900px) {
+    .main-navigation ul.sub-menu {
+        left: auto;
+        right: 0;
+        min-width: 12rem;
+        max-width: min(88vw, 20rem);
+    }
+
+    /*
+     * 2단을 옆에 나란히 두면 375px 화면에서는 자리가 없어 반대쪽으로 넘친다.
+     * 좁은 화면에서는 상위 항목 아래에 들여써서 펼친다. 닫힌 상태가 자리를
+     * 차지하지 않아야 하므로 여기서는 display 로 여닫는다.
+     */
+    .main-navigation .sub-menu .sub-menu {
+        display: none;
+        position: static;
+        left: auto;
+        right: auto;
+        min-width: 0;
+        max-width: none;
+        margin: 0.2rem 0 0.35rem 0.7rem;
+        padding: 0.2rem;
+        border: 0;
+        border-left: 2px solid #ececE8;
+        border-radius: 0;
+        box-shadow: none;
+        visibility: visible;
+        opacity: 1;
+        transform: none;
+    }
+
+    .main-navigation .sub-menu li:hover > .sub-menu,
+    .main-navigation .sub-menu li:focus-within > .sub-menu {
+        display: flex;
+        transform: none;
+    }
+
+    /* 아래로 펼치므로 화살표도 아래를 보게 */
+    .main-navigation .sub-menu .menu-item-has-children > a::after,
+    .main-navigation .sub-menu .menu-item-has-children:hover > a::after {
+        transform: rotate(45deg) translate(-0.05em, -0.1em);
+    }
+
+    .main-navigation .sub-menu a {
+        white-space: normal;
+        word-break: keep-all;
+    }
 }
 
 @media (max-width: 780px) {

@@ -189,3 +189,98 @@ function suji_search_all_boards( $query ) {
 	}
 }
 add_action( 'pre_get_posts', 'suji_search_all_boards' );
+
+/**
+ * 메뉴에서 지금 보고 있는 게시판을 강조한다.
+ *
+ * 메뉴 항목이 예전 분류 주소(/board/notice/)로 들어가 있으면 워드프레스가
+ * 지금 화면(글 타입 목록)과 같은 것으로 보지 못해 current 클래스를 붙이지
+ * 않는다. 주소를 옮겨간 곳으로 환산해 직접 대조한다. 메뉴를 새 아카이브
+ * 항목으로 바꿔 두어도 그대로 동작한다.
+ */
+function suji_menu_canonical_url( $url ) {
+	$suji_path = trim( (string) parse_url( $url, PHP_URL_PATH ), '/' );
+
+	if ( 0 === strpos( $suji_path, 'board/' ) ) {
+		$suji_slug = basename( $suji_path );
+		foreach ( suji_boards() as $suji_type => $suji_board ) {
+			if ( ! empty( $suji_board['taxonomy'] ) ) {
+				continue;   // 위원회별 목록은 주소가 그대로다
+			}
+			if ( in_array( $suji_slug, $suji_board['from'], true ) ) {
+				return untrailingslashit( (string) get_post_type_archive_link( $suji_type ) );
+			}
+		}
+	}
+
+	return untrailingslashit( $url );
+}
+
+function suji_mark_current_board_menu( $items ) {
+	if ( is_admin() || ! is_array( $items ) ) {
+		return $items;
+	}
+
+	$suji_types   = suji_board_post_types();
+	$suji_current = '';
+
+	if ( is_post_type_archive( $suji_types ) ) {
+		$suji_obj     = get_queried_object();
+		$suji_current = ( $suji_obj && isset( $suji_obj->name ) )
+			? (string) get_post_type_archive_link( $suji_obj->name )
+			: '';
+	} elseif ( is_singular( $suji_types ) ) {
+		$suji_current = (string) get_post_type_archive_link( get_post_type() );
+	} elseif ( is_tax( 'board_cat' ) ) {
+		$suji_link    = get_term_link( get_queried_object() );
+		$suji_current = is_wp_error( $suji_link ) ? '' : (string) $suji_link;
+	}
+
+	if ( ! $suji_current ) {
+		return $items;
+	}
+
+	$suji_current = untrailingslashit( $suji_current );
+	$suji_hits    = array();
+	$suji_by_id   = array();
+
+	foreach ( $items as $suji_item ) {
+		$suji_by_id[ $suji_item->ID ] = $suji_item;
+		if ( suji_menu_canonical_url( $suji_item->url ) === $suji_current ) {
+			$suji_hits[] = $suji_item;
+		}
+	}
+
+	if ( ! $suji_hits ) {
+		return $items;
+	}
+
+	// 최상위와 하위가 같은 곳을 가리키는 경우가 있다(본당 소식 = 공지 사항).
+	// 그때는 하위 항목을 현재 위치로 본다.
+	$suji_match = $suji_hits[0];
+	foreach ( $suji_hits as $suji_hit ) {
+		if ( (int) $suji_hit->menu_item_parent ) {
+			$suji_match = $suji_hit;
+			break;
+		}
+	}
+
+	$suji_match->classes[] = 'current-menu-item';
+
+	$suji_parent = (int) $suji_match->menu_item_parent;
+	while ( $suji_parent && isset( $suji_by_id[ $suji_parent ] ) ) {
+		$suji_by_id[ $suji_parent ]->classes[] = 'current-menu-ancestor';
+		$suji_by_id[ $suji_parent ]->classes[] = 'current-menu-parent';
+		$suji_parent = (int) $suji_by_id[ $suji_parent ]->menu_item_parent;
+	}
+
+	// 워드프레스가 이미 붙여 둔 것과 겹칠 수 있다
+	foreach ( $items as $suji_item ) {
+		if ( is_array( $suji_item->classes ) ) {
+			$suji_item->classes = array_values( array_unique( $suji_item->classes ) );
+		}
+	}
+
+	return $items;
+}
+add_filter( 'wp_nav_menu_objects', 'suji_mark_current_board_menu' );
