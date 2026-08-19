@@ -169,6 +169,14 @@ function suji_handle_registration() {
 		return;
 	}
 
+	/*
+	 * 역할을 코드에서 못 박는다. wp_create_user 는 '새 사용자 기본 역할' 설정을
+	 * 따르는데, 그 값이 글을 쓸 수 있는 역할로 바뀌어 있으면 홈페이지에서
+	 * 가입한 사람이 관리 권한을 얻는다.
+	 */
+	$suji_user = new WP_User( $suji_user_id );
+	$suji_user->set_role( 'subscriber' );
+
 	if ( $suji_name ) {
 		wp_update_user( array(
 			'ID'           => $suji_user_id,

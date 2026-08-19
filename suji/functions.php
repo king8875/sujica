@@ -18,6 +18,7 @@ require SUJI_DIR . '/inc/board-fields.php';
 require SUJI_DIR . '/inc/template-loader.php';
 require SUJI_DIR . '/inc/clergy.php';
 require SUJI_DIR . '/inc/auth.php';
+require SUJI_DIR . '/inc/board-roles.php';
 // Home banner ACF field group is managed directly in wp-admin (Custom Fields), not in code.
 require SUJI_DIR . '/inc/enqueue/enqueue.php';
 require SUJI_DIR . '/inc/customizer/customizer.php';
