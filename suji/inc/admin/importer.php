@@ -79,6 +79,17 @@ function suji_import_get( $url ) {
 /**
  * 제목 비교용 키. wptexturize 로 바뀌는 기호와 공백을 모두 지운다.
  */
+/**
+ * 첨부 주소를 사이트 기본 스킴으로 맞춘다.
+ *
+ * 관리자 화면을 http 로 열어둔 채 가져오기를 돌리면 is_ssl() 이 false 라
+ * wp_get_attachment_url() 이 http 주소를 돌려주고, 그대로 본문에 박혀
+ * 브라우저가 mixed content 경고를 낸다.
+ */
+function suji_import_url( $url ) {
+	return set_url_scheme( $url, parse_url( home_url(), PHP_URL_SCHEME ) );
+}
+
 function suji_import_key( $title ) {
 	$suji_title = html_entity_decode( wp_strip_all_tags( (string) $title ), ENT_QUOTES, 'UTF-8' );
 	$suji_title = str_replace(
@@ -235,7 +246,7 @@ function suji_import_sideload( $url, $post_id ) {
 
 	wp_update_attachment_metadata( $suji_id, wp_generate_attachment_metadata( $suji_id, $suji_upload['file'] ) );
 
-	return wp_get_attachment_url( $suji_id );
+	return suji_import_url( wp_get_attachment_url( $suji_id ) );
 }
 
 /**
@@ -508,7 +519,7 @@ function suji_import_attachments( $bo, $wr_id, $post_id ) {
 
 		$suji_rows .= sprintf(
 			'<li><a href="%s" download>%s</a> <span class="board-file-size">%s</span></li>' . "\n",
-			esc_url( wp_get_attachment_url( $suji_att ) ),
+			esc_url( suji_import_url( wp_get_attachment_url( $suji_att ) ) ),
 			esc_html( $suji_name ),
 			esc_html( size_format( strlen( $suji_file['body'] ) ) )
 		);

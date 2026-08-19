@@ -73,6 +73,16 @@ function suji_import_render() {
 		<p class="description" style="margin-top:-.4em">
 			이 창을 열어둔 채로 진행됩니다. 창을 닫아도 남은 목록은 보관되니 다시 눌러 이어가면 됩니다.
 		</p>
+		<h2 class="title"><?php esc_html_e( '4. 뒷정리', 'suji' ); ?></h2>
+		<p>
+			<button class="button" id="suji-fix"><?php esc_html_e( '이미지 주소 https 로 정리', 'suji' ); ?></button>
+			<span id="suji-fix-out"></span>
+		</p>
+		<p class="description" style="margin-top:-.4em">
+			관리자 화면을 http 로 열어둔 채 가져오기를 돌리면 이미지 주소가 http 로 박혀
+			브라우저가 경고를 냅니다. 가져오기가 끝난 뒤 한 번 눌러주세요.
+		</p>
+
 		<pre id="suji-log" style="max-height:24em;overflow:auto;background:#fff;border:1px solid #dcdcde;padding:.75em;margin-top:1em"></pre>
 	</div>
 
@@ -111,6 +121,16 @@ function suji_import_render() {
 				btn('suji-run-out').textContent = '';
 				btn('suji-run').disabled = true;
 				say('— 초기화');
+			});
+		});
+
+		btn('suji-fix').addEventListener('click', function (e) {
+			e.preventDefault();
+			var out = btn('suji-fix-out');
+			out.textContent = ' 정리 중…';
+			call('suji_import_fix_scheme').then(function (r) {
+				out.textContent = ' ' + (r.data || '');
+				say('— ' + (r.data || ''));
 			});
 		});
 
@@ -387,3 +407,35 @@ function suji_import_ajax_run() {
 	) );
 }
 add_action( 'wp_ajax_suji_import_run', 'suji_import_ajax_run' );
+
+/**
+ * 이미 본문에 http 로 박힌 업로드 주소를 사이트 기본 스킴으로 바꾼다.
+ * 관리자 화면을 http 로 열어둔 채 가져오기를 돌린 글이 대상이다.
+ */
+function suji_import_ajax_fix_scheme() {
+	suji_import_check();
+
+	global $wpdb;
+
+	$suji_https = trailingslashit( home_url( '/wp-content/uploads' ) );
+	$suji_http  = set_url_scheme( $suji_https, 'http' );
+	$suji_https = set_url_scheme( $suji_https, parse_url( home_url(), PHP_URL_SCHEME ) );
+
+	if ( $suji_http === $suji_https ) {
+		wp_send_json_success( '사이트가 http 라 바꿀 것이 없습니다.' );
+	}
+
+	$suji_rows = $wpdb->query( $wpdb->prepare(
+		"UPDATE {$wpdb->posts}
+		    SET post_content = REPLACE( post_content, %s, %s )
+		  WHERE post_content LIKE %s",
+		$suji_http,
+		$suji_https,
+		'%' . $wpdb->esc_like( $suji_http ) . '%'
+	) );
+
+	wp_cache_flush();
+
+	wp_send_json_success( sprintf( '글 %d건의 이미지 주소를 https 로 바꿨습니다.', (int) $suji_rows ) );
+}
+add_action( 'wp_ajax_suji_import_fix_scheme', 'suji_import_ajax_fix_scheme' );

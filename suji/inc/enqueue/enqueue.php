@@ -74,12 +74,19 @@ function suji_enqueue_assets() {
 		wp_enqueue_style( 'suji-board-archive', SUJI_URI . '/assets/css/pages/board-archive.css', array( 'suji-board-post' ), suji_asset_version( '/assets/css/pages/board-archive.css' ) );
 	}
 
-	if ( is_page() && function_exists( 'have_rows' ) && have_rows( 'accordion_items', get_queried_object_id() ) ) {
+	/*
+	 * 여기서 have_rows() 를 쓰면 안 된다. wp_enqueue_scripts 는 템플릿보다 먼저
+	 * 도는데, have_rows() 첫 호출은 리피터 커서를 열어 둔 채 true 를 돌려준다.
+	 * 그래서 템플릿의 if ( have_rows() ) 가 두 번째 호출이 되어 커서를 한 칸
+	 * 밀어 버리고, 첫 행이 화면에서 통째로 빠졌다. get_field() 는 커서를
+	 * 건드리지 않으므로 존재 여부만 볼 때는 이쪽을 쓴다.
+	 */
+	if ( is_page() && function_exists( 'get_field' ) && ! empty( get_field( 'accordion_items', get_queried_object_id() ) ) ) {
 		wp_enqueue_style( 'suji-accordion', SUJI_URI . '/assets/css/components/accordion.css', array( 'suji-common' ), suji_asset_version( '/assets/css/components/accordion.css' ) );
 		wp_enqueue_script( 'suji-accordion', SUJI_URI . '/assets/js/accordion.js', array(), suji_asset_version( '/assets/js/accordion.js' ), true );
 	}
 
-	if ( is_front_page() && function_exists( 'have_rows' ) && have_rows( 'home_banner_slides', get_option( 'page_on_front' ) ) ) {
+	if ( is_front_page() && function_exists( 'get_field' ) && ! empty( get_field( 'home_banner_slides', get_option( 'page_on_front' ) ) ) ) {
 		wp_enqueue_style( 'swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), null );
 		wp_enqueue_script( 'swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), null, true );
 		wp_enqueue_script( 'suji-home-banner', SUJI_URI . '/assets/js/home-banner.js', array( 'swiper' ), suji_asset_version( '/assets/js/home-banner.js' ), true );
