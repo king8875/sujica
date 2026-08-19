@@ -128,6 +128,13 @@ function suji_register_board_fields() {
 		),
 	) );
 }
+/*
+ * lofields 는 plugins_loaded 에서 lof/init 을 발동한다. 테마 functions.php 는
+ * 그보다 나중에 읽히므로 lof/init 에만 걸면 이미 지나간 훅이 되어 필드가
+ * 나타나지 않는다. 실제로 그랬다. init 에서 직접 등록하고, 진짜 ACF 를 쓰는
+ * 경우를 위해 두 훅도 함께 남겨 둔다(같은 key 로 다시 등록해도 덮어쓰기다).
+ */
+add_action( 'init', 'suji_register_board_fields', 5 );
 add_action( 'lof/init', 'suji_register_board_fields' );
 add_action( 'acf/init', 'suji_register_board_fields' );
 
