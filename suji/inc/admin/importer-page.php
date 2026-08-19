@@ -79,9 +79,15 @@ function suji_import_render() {
 			<button class="button" id="suji-fix"><?php esc_html_e( '이미지 주소 https 로 정리', 'suji' ); ?></button>
 			<span id="suji-fix-out"></span>
 		</p>
+		<p>
+			<button class="button button-primary" id="suji-dedupe"><?php esc_html_e( '중복 사진 정리', 'suji' ); ?></button>
+			<span id="suji-dedupe-out"></span>
+		</p>
 		<p class="description" style="margin-top:-.4em">
-			관리자 화면을 http 로 열어둔 채 가져오기를 돌리면 이미지 주소가 http 로 박혀
-			브라우저가 경고를 냅니다. 가져오기가 끝난 뒤 한 번 눌러주세요.
+			<strong>이미지 주소 https</strong> — 관리자 화면을 http 로 열어둔 채 가져오기를 돌리면
+			이미지 주소가 http 로 박혀 브라우저가 경고를 냅니다.<br>
+			<strong>중복 사진 정리</strong> — 같은 사진이 여러 번 올라간 글에서 첫 장만 남기고
+			나머지는 첨부까지 삭제합니다. 대표 이미지로 지정된 장은 건드리지 않습니다.
 		</p>
 
 		<pre id="suji-log" style="max-height:24em;overflow:auto;background:#fff;border:1px solid #dcdcde;padding:.75em;margin-top:1em"></pre>
@@ -134,6 +140,33 @@ function suji_import_render() {
 				say('— ' + (r.data || ''));
 			});
 		});
+
+		btn('suji-dedupe').addEventListener('click', function (e) {
+			e.preventDefault();
+			stop = false;
+			btn('suji-dedupe').disabled = true;
+			btn('suji-stop').disabled = false;
+			dedupeStep();
+		});
+
+		function dedupeStep() {
+			if (stop) { btn('suji-dedupe').disabled = false; btn('suji-stop').disabled = true; return; }
+			call('suji_import_dedupe').then(function (r) {
+				(r.data.lines || []).forEach(say);
+				btn('suji-dedupe-out').textContent =
+					' 남은 글 ' + r.data.left + '건 · 회수 ' + r.data.freed;
+				if (r.data.left > 0) {
+					setTimeout(dedupeStep, 200);
+				} else {
+					btn('suji-dedupe').disabled = false;
+					btn('suji-stop').disabled = true;
+				}
+			}).catch(function (err) {
+				say('— 정리 오류: ' + err + ' (다시 누르면 이어서 진행합니다)');
+				btn('suji-dedupe').disabled = false;
+				btn('suji-stop').disabled = true;
+			});
+		}
 
 		btn('suji-scan').addEventListener('click', function (e) {
 			e.preventDefault();
@@ -441,3 +474,59 @@ function suji_import_ajax_fix_scheme() {
 	wp_send_json_success( sprintf( '글 %d건의 이미지 주소를 https 로 바꿨습니다.', (int) $suji_rows ) );
 }
 add_action( 'wp_ajax_suji_import_fix_scheme', 'suji_import_ajax_fix_scheme' );
+
+/**
+ * 중복으로 들어간 사진을 글 단위로 정리한다. 한 번 호출에 몇 글씩.
+ */
+function suji_import_ajax_dedupe() {
+	suji_import_check();
+
+	$suji_queue = get_option( 'suji_import_dedupe_queue', null );
+
+	// 처음 호출이면 대상 글 목록을 만든다
+	if ( null === $suji_queue ) {
+		$suji_queue = get_posts( array(
+			'post_type'      => suji_board_post_types(),
+			'posts_per_page' => -1,
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+			'orderby'        => 'ID',
+			'order'          => 'ASC',
+		) );
+		update_option( 'suji_import_dedupe_queue', $suji_queue, false );
+		update_option( 'suji_import_dedupe_stat', array( 0, 0 ), false );
+	}
+
+	$suji_queue = (array) $suji_queue;
+	$suji_stat  = (array) get_option( 'suji_import_dedupe_stat', array( 0, 0 ) );
+	$suji_lines = array();
+
+	for ( $suji_i = 0; $suji_i < 25 && $suji_queue; $suji_i++ ) {
+		$suji_id = (int) array_shift( $suji_queue );
+		list( $suji_n, $suji_b ) = suji_import_dedupe_post( $suji_id );
+		if ( $suji_n ) {
+			$suji_stat[0] += $suji_n;
+			$suji_stat[1] += $suji_b;
+			$suji_lines[] = sprintf( '[%s] 중복 %d장 삭제 (%s)',
+				get_the_title( $suji_id ) ?: ( '#' . $suji_id ), $suji_n, size_format( $suji_b ) );
+		}
+	}
+
+	update_option( 'suji_import_dedupe_queue', $suji_queue, false );
+	update_option( 'suji_import_dedupe_stat', $suji_stat, false );
+
+	$suji_left = count( $suji_queue );
+	if ( 0 === $suji_left ) {
+		delete_option( 'suji_import_dedupe_queue' );
+		delete_option( 'suji_import_dedupe_stat' );
+		$suji_lines[] = sprintf( '— 정리 완료: 중복 %d장 삭제, %s 회수',
+			(int) $suji_stat[0], size_format( (int) $suji_stat[1] ) );
+	}
+
+	wp_send_json_success( array(
+		'lines' => $suji_lines,
+		'left'  => $suji_left,
+		'freed' => size_format( (int) $suji_stat[1] ),
+	) );
+}
+add_action( 'wp_ajax_suji_import_dedupe', 'suji_import_ajax_dedupe' );

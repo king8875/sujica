@@ -90,6 +90,33 @@ function suji_import_url( $url ) {
 	return set_url_scheme( $url, parse_url( home_url(), PHP_URL_SCHEME ) );
 }
 
+/**
+ * 이미지 파일 비교용 키.
+ *
+ * 같은 사진인지 판단하려면 대소문자와 워드프레스가 붙이는 꼬리표를 무시해야
+ * 한다. 파일명에 대문자가 섞여 있는데(그누보드가 붙인 무작위 문자열) 예전
+ * 코드가 sanitize_title() 로 소문자화해 비교하는 바람에 매번 "없는 사진"으로
+ * 판정되어 같은 사진이 계속 다시 올라갔다.
+ */
+function suji_import_file_key( $url ) {
+	$suji_name = pathinfo( (string) parse_url( $url, PHP_URL_PATH ), PATHINFO_FILENAME );
+	$suji_name = preg_replace( '/-\d+x\d+$/', '', $suji_name );   // 썸네일 크기
+	$suji_name = preg_replace( '/-\d+$/', '', $suji_name );        // 같은 이름 재업로드 꼬리표
+	return strtolower( preg_replace( '/[^A-Za-z0-9]/', '', (string) $suji_name ) );
+}
+
+/**
+ * 본문에 이미 들어 있는 이미지의 키 목록.
+ */
+function suji_import_existing_image_keys( $content ) {
+	preg_match_all( '#<img[^>]+src="([^"]+)"#i', (string) $content, $suji_m );
+	$suji_keys = array();
+	foreach ( $suji_m[1] as $suji_url ) {
+		$suji_keys[ suji_import_file_key( $suji_url ) ] = true;
+	}
+	return $suji_keys;
+}
+
 function suji_import_key( $title ) {
 	$suji_title = html_entity_decode( wp_strip_all_tags( (string) $title ), ENT_QUOTES, 'UTF-8' );
 	$suji_title = str_replace(
@@ -392,14 +419,15 @@ function suji_import_enrich_one( $post_id, $bo, $wr_id ) {
 
 	$suji_added = 0;
 	$suji_html_add = '';
+	$suji_have = suji_import_existing_image_keys( $suji_post->post_content );
 
 	foreach ( array_unique( $suji_m[1] ?? array() ) as $suji_url ) {
-		// 이미 붙어 있는 사진이면 건너뛴다 (파일명으로 판단)
-		$suji_file = wp_basename( parse_url( $suji_url, PHP_URL_PATH ) );
-		$suji_stem = sanitize_title( pathinfo( $suji_file, PATHINFO_FILENAME ) );
-		if ( $suji_stem && false !== strpos( $suji_post->post_content, $suji_stem ) ) {
+		// 이미 붙어 있는 사진이면 건너뛴다
+		$suji_key = suji_import_file_key( $suji_url );
+		if ( '' === $suji_key || isset( $suji_have[ $suji_key ] ) ) {
 			continue;
 		}
+		$suji_have[ $suji_key ] = true;
 
 		$suji_new = suji_import_sideload( $suji_url, $post_id );
 		if ( ! $suji_new ) {
@@ -535,4 +563,87 @@ function suji_import_attachments( $bo, $wr_id, $post_id ) {
 	}
 
 	return array( $suji_added, $suji_gone );
+}
+
+/**
+ * 한 글에서 같은 사진이 여러 번 들어간 것을 정리한다.
+ *
+ * 중복 판정이 잘못돼 있던 동안 같은 사진이 x.jpg, x-1.jpg, x-2.jpg 로 계속
+ * 다시 올라갔다. 본문에서는 첫 장만 남기고 지우고, 지운 장에 딸린 첨부는
+ * 썸네일까지 함께 삭제한다.
+ *
+ * 반환값: array( 지운 사진 수, 회수한 바이트 )
+ */
+function suji_import_dedupe_post( $post_id ) {
+	$suji_post = get_post( $post_id );
+	if ( ! $suji_post ) {
+		return array( 0, 0 );
+	}
+
+	preg_match_all( '#<p>\s*<img[^>]+src="([^"]+)"[^>]*>\s*</p>|<img[^>]+src="([^"]+)"[^>]*>#i',
+		$suji_post->post_content, $suji_m, PREG_SET_ORDER );
+
+	$suji_seen    = array();
+	$suji_content = $suji_post->post_content;
+	$suji_removed = 0;
+	$suji_bytes   = 0;
+	$suji_thumb   = (int) get_post_thumbnail_id( $post_id );
+
+	foreach ( $suji_m as $suji_one ) {
+		$suji_tag = $suji_one[0];
+		$suji_url = '' !== $suji_one[1] ? $suji_one[1] : ( $suji_one[2] ?? '' );
+		if ( '' === $suji_url ) {
+			continue;
+		}
+
+		// 업로드 폴더의 사진만 대상
+		if ( false === strpos( $suji_url, '/wp-content/uploads/' ) ) {
+			continue;
+		}
+
+		$suji_key = suji_import_file_key( $suji_url );
+		if ( '' === $suji_key ) {
+			continue;
+		}
+
+		if ( ! isset( $suji_seen[ $suji_key ] ) ) {
+			$suji_seen[ $suji_key ] = true;
+			continue;
+		}
+
+		// 두 번째 이후 → 본문에서 지우고 첨부도 삭제
+		$suji_pos = strpos( $suji_content, $suji_tag );
+		if ( false !== $suji_pos ) {
+			$suji_content = substr_replace( $suji_content, '', $suji_pos, strlen( $suji_tag ) );
+		}
+
+		$suji_att = attachment_url_to_postid( $suji_url );
+		if ( $suji_att && $suji_att !== $suji_thumb ) {
+			$suji_path = get_attached_file( $suji_att );
+			if ( $suji_path && file_exists( $suji_path ) ) {
+				$suji_bytes += (int) filesize( $suji_path );
+				// 썸네일도 함께 센다
+				$suji_meta = wp_get_attachment_metadata( $suji_att );
+				$suji_dir  = dirname( $suji_path );
+				foreach ( ( $suji_meta['sizes'] ?? array() ) as $suji_size ) {
+					$suji_f = $suji_dir . '/' . ( $suji_size['file'] ?? '' );
+					if ( ! empty( $suji_size['file'] ) && file_exists( $suji_f ) ) {
+						$suji_bytes += (int) filesize( $suji_f );
+					}
+				}
+			}
+			wp_delete_attachment( $suji_att, true );
+		}
+
+		$suji_removed++;
+	}
+
+	if ( $suji_removed ) {
+		wp_update_post( array(
+			'ID'           => $post_id,
+			'post_content' => preg_replace( "/\n{3,}/", "\n\n", $suji_content ),
+		) );
+	}
+
+	return array( $suji_removed, $suji_bytes );
 }
