@@ -241,12 +241,24 @@ function suji_import_parse_post( $html ) {
 		$suji_out['hit'] = (int) str_replace( ',', '', $suji_m[1] );
 	}
 
-	if ( preg_match( '#id="bo_v_atc"[^>]*>(.*?)<!--\s*\}?\s*본문#s', $html, $suji_m )
-		|| preg_match( '#id="bo_v_con"[^>]*>(.*?)</div>\s*</div>#s', $html, $suji_m ) ) {
+	/*
+	 * 사진이 들어가는 자리가 두 곳이다.
+	 *   - 첨부로 올린 사진  : <div id="bo_v_img">   (본문 앞)
+	 *   - 에디터로 넣은 사진: <div id="bo_v_con">   (본문 안, /data/editor/)
+	 * 둘 다 <section id="bo_v_atc"> 안에 있고 끝은 닫는 주석이다.
+	 *
+	 * 예전에는 종료 표지를 '<!--\s*\}?\s*본문' 으로 썼는데 닫는 중괄호가 선택이라
+	 * 여는 주석 <!-- 본문 내용 시작 { --> 에서 먼저 끊겼다. 그래서 본문이 거의
+	 * 비었고, 에디터로 넣은 사진이 하나도 잡히지 않았다.
+	 */
+	if ( preg_match( '#id="bo_v_atc"[^>]*>(.*?)<!--\s*\}\s*본문#s', $html, $suji_m ) ) {
 		$suji_body = $suji_m[1];
-		// 그누보드가 감싸는 껍데기 제거
-		$suji_body = preg_replace( '#<h2[^>]*>.*?</h2>#s', '', $suji_body );
+		$suji_body = preg_replace( '#<h2[^>]*id="bo_v_atc_title"[^>]*>.*?</h2>#s', '', $suji_body );
+		$suji_body = preg_replace( '#<div[^>]*id="bo_v_share"[^>]*>.*?</div>#s', '', $suji_body );
+		$suji_body = preg_replace( '#<!--[^>]*?본문[^>]*?-->#s', '', $suji_body );
 		$suji_out['content'] = trim( $suji_body );
+	} elseif ( preg_match( '#id="bo_v_con"[^>]*>(.*?)</div>#s', $html, $suji_m ) ) {
+		$suji_out['content'] = trim( $suji_m[1] );
 	}
 
 	return $suji_out;
