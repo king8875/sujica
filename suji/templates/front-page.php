@@ -16,7 +16,7 @@ $suji_gallery = suji_board_recent( 'suji_gallery', 6 );
 // 최근 글에 사진이 하나도 없으면 썸네일 격자 대신 목록으로 그린다.
 $suji_gallery_has_thumb = false;
 foreach ( $suji_gallery as $suji_post ) {
-        if ( suji_first_image_from_content( $suji_post->post_content ) ) {
+        if ( get_post_thumbnail_id( $suji_post ) || suji_first_image_from_content( $suji_post->post_content ) ) {
                 $suji_gallery_has_thumb = true;
                 break;
         }
@@ -200,7 +200,12 @@ foreach ( $suji_gallery as $suji_post ) {
 
                     <ul class="<?php echo $suji_gallery_has_thumb ? 'home-gallery-grid' : 'home-gallery-list'; ?>">
                         <?php foreach ($suji_gallery as $suji_post) : ?>
-                            <?php $suji_thumb = suji_first_image_from_content($suji_post->post_content); ?>
+                            <?php
+                            $suji_thumb = get_the_post_thumbnail_url($suji_post, 'medium_large');
+                            if (!$suji_thumb) {
+                                $suji_thumb = suji_first_image_from_content($suji_post->post_content);
+                            }
+                            ?>
                             <li>
                                 <a href="<?php echo esc_url(get_permalink($suji_post)); ?>">
                                     <?php if ($suji_gallery_has_thumb) : ?>

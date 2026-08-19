@@ -83,11 +83,17 @@ function suji_import_render() {
 			<button class="button button-primary" id="suji-dedupe"><?php esc_html_e( '중복 사진 정리', 'suji' ); ?></button>
 			<span id="suji-dedupe-out"></span>
 		</p>
+		<p>
+			<button class="button" id="suji-titles"><?php esc_html_e( '제목 정리', 'suji' ); ?></button>
+			<span id="suji-titles-out"></span>
+		</p>
 		<p class="description" style="margin-top:-.4em">
 			<strong>이미지 주소 https</strong> — 관리자 화면을 http 로 열어둔 채 가져오기를 돌리면
 			이미지 주소가 http 로 박혀 브라우저가 경고를 냅니다.<br>
 			<strong>중복 사진 정리</strong> — 같은 사진이 여러 번 올라간 글에서 첫 장만 남기고
-			나머지는 첨부까지 삭제합니다. 대표 이미지로 지정된 장은 건드리지 않습니다.
+			나머지는 첨부까지 삭제합니다. 대표 이미지로 지정된 장은 건드리지 않습니다.<br>
+			<strong>제목 정리</strong> — 제목 앞에 원본 게시판의 분류 이름(연도 · 문서 · 공지)이
+			붙어 들어간 글을 고칩니다.
 		</p>
 
 		<pre id="suji-log" style="max-height:24em;overflow:auto;background:#fff;border:1px solid #dcdcde;padding:.75em;margin-top:1em"></pre>
@@ -140,6 +146,28 @@ function suji_import_render() {
 				say('— ' + (r.data || ''));
 			});
 		});
+
+		btn('suji-titles').addEventListener('click', function (e) {
+			e.preventDefault();
+			btn('suji-titles').disabled = true;
+			titleStep();
+		});
+
+		function titleStep() {
+			call('suji_import_fix_titles').then(function (r) {
+				(r.data.lines || []).forEach(say);
+				btn('suji-titles-out').textContent = ' ' + r.data.count + '건 정리';
+				if (r.data.left > 0) {
+					setTimeout(titleStep, 200);
+				} else {
+					say('— 제목 정리 완료');
+					btn('suji-titles').disabled = false;
+				}
+			}).catch(function (err) {
+				say('— 제목 정리 오류: ' + err);
+				btn('suji-titles').disabled = false;
+			});
+		}
 
 		btn('suji-dedupe').addEventListener('click', function (e) {
 			e.preventDefault();
@@ -530,3 +558,19 @@ function suji_import_ajax_dedupe() {
 	) );
 }
 add_action( 'wp_ajax_suji_import_dedupe', 'suji_import_ajax_dedupe' );
+
+/**
+ * 제목에 분류 이름이 붙어 들어간 글을 정리한다.
+ */
+function suji_import_ajax_fix_titles() {
+	suji_import_check();
+
+	list( $suji_count, $suji_lines ) = suji_import_fix_titles( 40 );
+
+	wp_send_json_success( array(
+		'lines' => $suji_lines,
+		'left'  => $suji_count >= 40 ? 1 : 0,
+		'count' => $suji_count,
+	) );
+}
+add_action( 'wp_ajax_suji_import_fix_titles', 'suji_import_ajax_fix_titles' );

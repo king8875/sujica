@@ -369,3 +369,85 @@
 	color: #aaa;
 	white-space: nowrap;
 }
+
+/* ------------------------- 게시판별 입력칸 표시 ------------------------- */
+/* 사진 칸으로 올린 사진들 */
+.board-photos {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 0.75rem;
+	margin: 1.75rem 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.board-photos img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	margin: 0;
+	border-radius: 8px;
+	transition: opacity 0.15s ease;
+}
+
+.board-photos a:hover img {
+	opacity: 0.88;
+}
+
+/* 주보 이미지 · 주보 보기 링크 */
+.board-extra-image {
+	margin: 1.75rem 0 0;
+}
+
+.board-extra-image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	margin: 0;
+	border-radius: 8px;
+}
+
+.board-extra-link {
+	margin: 1.75rem 0 0;
+}
+
+.board-link-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.7rem 1.35rem;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.board-link-btn:hover {
+	background: #333;
+	color: #fff;
+}
+
+.board-link-btn svg {
+	transition: transform 0.15s ease;
+}
+
+.board-link-btn:hover svg {
+	transform: translateX(2px);
+}
+
+@media (max-width: 600px) {
+	.board-photos {
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.5rem;
+	}
+
+	.board-link-btn {
+		width: 100%;
+		justify-content: center;
+	}
+}

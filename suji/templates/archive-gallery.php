@@ -29,6 +29,18 @@ $suji_board = suji_board_of( 'suji_gallery' );
 			while ( have_posts() ) :
 				the_post();
 				$suji_thumb = get_the_post_thumbnail_url( null, 'medium_large' );
+
+				// 대표 이미지가 없으면 사진 칸의 첫 장, 그것도 없으면 본문 첫 사진
+				if ( ! $suji_thumb && function_exists( 'get_field' ) ) {
+					$suji_photos = get_field( 'gallery_photos' );
+					if ( is_array( $suji_photos ) && $suji_photos ) {
+						$suji_one   = reset( $suji_photos );
+						$suji_thumb = is_array( $suji_one )
+							? ( $suji_one['sizes']['medium_large'] ?? $suji_one['url'] ?? '' )
+							: '';
+					}
+				}
+
 				if ( ! $suji_thumb ) {
 					$suji_thumb = suji_first_image_from_content( get_the_content() );
 				}

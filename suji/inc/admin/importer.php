@@ -210,7 +210,20 @@ function suji_import_parse_post( $html ) {
 
 	if ( preg_match( '#<h2[^>]*id="bo_v_title"[^>]*>(.*?)</h2>#s', $html, $suji_m )
 		|| preg_match( '#class="bo_v_tit"[^>]*>(.*?)</(?:h1|h2|div|span)>#s', $html, $suji_m ) ) {
-		$suji_out['title'] = trim( html_entity_decode( wp_strip_all_tags( $suji_m[1] ), ENT_QUOTES, 'UTF-8' ) );
+
+		$suji_block = $suji_m[1];
+
+		/*
+		 * 제목 영역은 이렇게 생겼다.
+		 *   <span class="bo_v_cate">연도</span><span class="bo_v_tit">선종공지(...)</span>
+		 * 통째로 태그를 지우면 분류 이름('연도')이 제목 앞에 붙는다.
+		 */
+		if ( preg_match( '#<span[^>]*class="[^"]*bo_v_tit[^"]*"[^>]*>(.*?)</span>#s', $suji_block, $suji_t ) ) {
+			$suji_block = $suji_t[1];
+		}
+
+		$suji_title = html_entity_decode( wp_strip_all_tags( $suji_block ), ENT_QUOTES, 'UTF-8' );
+		$suji_out['title'] = trim( preg_replace( '/\s+/u', ' ', $suji_title ) );
 	}
 
 	// 작성일 — "26-08-15 10:43" 또는 "2026-08-15 10:43"
@@ -646,4 +659,58 @@ function suji_import_dedupe_post( $post_id ) {
 	}
 
 	return array( $suji_removed, $suji_bytes );
+}
+
+/**
+ * 이관 초기에 제목 앞에 분류 이름이 붙어 들어간 글을 고친다.
+ *
+ * 원본 제목 영역에 분류(연도 · 문서 · 공지)와 제목이 같은 태그 안에 들어 있어,
+ * 통째로 태그를 지우면서 앞에 붙었다. 줄바꿈까지 그대로 남아 있다.
+ *
+ * 반환값: array( 고친 수, 줄 목록 )
+ */
+function suji_import_fix_titles( $limit = 40 ) {
+	global $wpdb;
+
+	$suji_types = "'" . implode( "','", array_map( 'esc_sql', suji_board_post_types() ) ) . "'";
+
+	// 제목에 줄바꿈이 남아 있는 글이 대상
+	$suji_rows = $wpdb->get_results( $wpdb->prepare(
+		"SELECT ID, post_title, post_name FROM {$wpdb->posts}
+		  WHERE post_type IN ({$suji_types})
+		    AND post_status != 'trash'
+		    AND post_title REGEXP '[\n\r]'
+		  LIMIT %d",
+		$limit
+	) );
+
+	$suji_lines = array();
+
+	foreach ( $suji_rows as $suji_row ) {
+		// 줄바꿈 앞이 분류, 뒤가 제목이다
+		$suji_parts = preg_split( '/[\r\n]+/u', $suji_row->post_title );
+		$suji_parts = array_values( array_filter( array_map( 'trim', (array) $suji_parts ), 'strlen' ) );
+
+		if ( count( $suji_parts ) < 2 ) {
+			// 줄바꿈만 정리
+			$suji_new = trim( preg_replace( '/\s+/u', ' ', $suji_row->post_title ) );
+		} else {
+			$suji_new = array_pop( $suji_parts );   // 마지막 조각이 실제 제목
+		}
+
+		if ( '' === $suji_new || $suji_new === $suji_row->post_title ) {
+			continue;
+		}
+
+		wp_update_post( array(
+			'ID'         => $suji_row->ID,
+			'post_title' => $suji_new,
+			// 주소도 제목에 맞춰 다시 만든다. 예전 주소는 워드프레스가 넘겨준다.
+			'post_name'  => '',
+		) );
+
+		$suji_lines[] = sprintf( '#%d  %s', $suji_row->ID, $suji_new );
+	}
+
+	return array( count( $suji_lines ), $suji_lines );
 }

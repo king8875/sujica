@@ -48,6 +48,9 @@ $suji_next = get_next_post();
 
 	<div class="board-single-content entry-content">
 		<?php the_content(); ?>
+
+		<?php // 게시판별 입력칸 — 사진 · 첨부 · 주보 링크 ?>
+		<?php get_template_part( 'template-parts/board-extras' ); ?>
 	</div>
 
 	<?php if ( $suji_prev || $suji_next ) : ?>
