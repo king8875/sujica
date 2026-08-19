@@ -100,3 +100,27 @@
 		text-align: left;
 	}
 }
+
+/* ------------------------------ 고정 배지 ------------------------------ */
+.board-item-pin {
+	flex-shrink: 0;
+	align-self: center;
+	padding: 0.15rem 0.45rem;
+	border-radius: 5px;
+	background: #111;
+	color: #fff;
+	font-size: 0.72rem;
+	font-weight: 700;
+	line-height: 1.5;
+	white-space: nowrap;
+}
+
+.board-list-item:has(.board-item-pin) {
+	background: #fafaf8;
+}
+
+@media (max-width: 600px) {
+	.board-item-pin {
+		align-self: flex-start;
+	}
+}

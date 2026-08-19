@@ -16,23 +16,75 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-function suji_field_file_rows( $prefix ) {
+/**
+ * 어느 게시판이든 쓰이는 칸 — 고정 · 링크 · 첨부파일.
+ *
+ * 게시판마다 필요한 것이 미리 정해져 있지 않다. 공지에 링크만 붙을 수도,
+ * 주보에 파일만 붙을 수도 있다. 그래서 세 칸을 모두 두고, 쓸 것만 '추가'
+ * 버튼으로 줄을 늘리도록 했다. 비워 두면 화면에 아무것도 그리지 않는다.
+ */
+function suji_board_common_fields() {
 	return array(
 		array(
-			'key'   => 'field_' . $prefix . '_file',
-			'label' => '파일',
-			'name'  => 'file',
-			'type'  => 'file',
-			'return_format' => 'array',
-			'wrapper' => array( 'width' => '45' ),
+			'key'          => 'field_suji_board_pinned',
+			'label'        => '목록 맨 위에 고정',
+			'name'         => 'board_pinned',
+			'type'         => 'true_false',
+			'ui'           => 1,
+			'instructions' => '켜면 이 게시판 목록 맨 위에 계속 보입니다.',
 		),
 		array(
-			'key'   => 'field_' . $prefix . '_label',
-			'label' => '표시할 이름',
-			'name'  => 'label',
-			'type'  => 'text',
-			'instructions' => '비워두면 파일 이름을 그대로 씁니다.',
-			'wrapper' => array( 'width' => '55' ),
+			'key'          => 'field_suji_board_links',
+			'label'        => '링크',
+			'name'         => 'board_links',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => '링크 추가',
+			'instructions' => '필요할 때만 추가하세요. 글 맨 아래에 버튼으로 나옵니다.',
+			'sub_fields'   => array(
+				array(
+					'key'     => 'field_suji_link_url',
+					'label'   => '주소',
+					'name'    => 'url',
+					'type'    => 'url',
+					'wrapper' => array( 'width' => '60' ),
+				),
+				array(
+					'key'          => 'field_suji_link_label',
+					'label'        => '버튼에 쓸 글자',
+					'name'         => 'label',
+					'type'         => 'text',
+					'instructions' => '비워두면 ‘바로가기’로 나옵니다.',
+					'wrapper'      => array( 'width' => '40' ),
+				),
+			),
+		),
+		array(
+			'key'          => 'field_suji_board_files',
+			'label'        => '첨부파일',
+			'name'         => 'board_files',
+			'type'         => 'repeater',
+			'layout'       => 'table',
+			'button_label' => '첨부파일 추가',
+			'instructions' => '필요할 때만 추가하세요. 글 맨 아래에 내려받기 목록으로 나옵니다.',
+			'sub_fields'   => array(
+				array(
+					'key'           => 'field_suji_file_file',
+					'label'         => '파일',
+					'name'          => 'file',
+					'type'          => 'file',
+					'return_format' => 'array',
+					'wrapper'       => array( 'width' => '45' ),
+				),
+				array(
+					'key'          => 'field_suji_file_label',
+					'label'        => '표시할 이름',
+					'name'         => 'label',
+					'type'         => 'text',
+					'instructions' => '비워두면 파일 이름을 그대로 씁니다.',
+					'wrapper'      => array( 'width' => '55' ),
+				),
+			),
 		),
 	);
 }
@@ -42,38 +94,33 @@ function suji_register_board_fields() {
 		return;
 	}
 
+	// 게시판 전체에 같은 칸을 붙인다
+	$suji_where = array();
+	foreach ( suji_board_post_types() as $suji_type ) {
+		$suji_where[] = array( array( 'param' => 'post_type', 'operator' => '==', 'value' => $suji_type ) );
+	}
+
+	lof_add_local_field_group( array(
+		'key'      => 'group_suji_board_common',
+		'title'    => '링크 · 첨부파일',
+		'location' => $suji_where,
+		'fields'   => suji_board_common_fields(),
+	) );
+
 	// ------------------------------ 포토앨범 ------------------------------
 	lof_add_local_field_group( array(
 		'key'      => 'group_suji_gallery',
 		'title'    => '사진',
+		'position' => 'normal',
 		'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'suji_gallery' ) ) ),
 		'fields'   => array(
 			array(
-				'key'          => 'field_suji_gallery_photos',
-				'label'        => '사진',
-				'name'         => 'gallery_photos',
-				'type'         => 'gallery',
-				'instructions' => '여러 장을 한 번에 올릴 수 있습니다. 첫 장이 목록의 대표 사진이 됩니다.',
+				'key'           => 'field_suji_gallery_photos',
+				'label'         => '사진',
+				'name'          => 'gallery_photos',
+				'type'          => 'gallery',
+				'instructions'  => '여러 장을 한 번에 올릴 수 있습니다. 첫 장이 목록의 대표 사진이 됩니다.',
 				'return_format' => 'array',
-			),
-		),
-	) );
-
-	// ---------------------------- 문서 자료실 ----------------------------
-	lof_add_local_field_group( array(
-		'key'      => 'group_suji_docs',
-		'title'    => '첨부 파일',
-		'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'suji_docs' ) ) ),
-		'fields'   => array(
-			array(
-				'key'          => 'field_suji_docs_files',
-				'label'        => '첨부 파일',
-				'name'         => 'board_files',
-				'type'         => 'repeater',
-				'layout'       => 'table',
-				'button_label' => '파일 추가',
-				'instructions' => '내려받기 목록이 글 아래에 자동으로 만들어집니다.',
-				'sub_fields'   => suji_field_file_rows( 'docs' ),
 			),
 		),
 	) );
@@ -81,58 +128,26 @@ function suji_register_board_fields() {
 	// ----------------------------- 본당 주보 -----------------------------
 	lof_add_local_field_group( array(
 		'key'      => 'group_suji_bulletin',
-		'title'    => '주보',
+		'title'    => '주보 이미지',
 		'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'suji_bulletin' ) ) ),
 		'fields'   => array(
 			array(
-				'key'          => 'field_suji_bulletin_url',
-				'label'        => '주보 보기 링크',
-				'name'         => 'bulletin_url',
-				'type'         => 'url',
-				'instructions' => '교구 주보 e-book 주소를 붙여넣으세요.',
-			),
-			array(
-				'key'          => 'field_suji_bulletin_image',
-				'label'        => '주보 이미지',
-				'name'         => 'bulletin_image',
-				'type'         => 'image',
-				'instructions' => '주보를 이미지로 올릴 경우에만 씁니다. 목록의 대표 사진이 됩니다.',
+				'key'           => 'field_suji_bulletin_image',
+				'label'         => '주보 이미지',
+				'name'          => 'bulletin_image',
+				'type'          => 'image',
+				'instructions'  => '주보를 이미지로 올릴 때 씁니다. 목록의 대표 사진이 됩니다. 주보 e-book 주소는 위의 ‘링크’ 칸에 넣으세요.',
 				'return_format' => 'array',
 			),
 		),
 	) );
-
-	// ----------------------------- 공지사항 -----------------------------
-	lof_add_local_field_group( array(
-		'key'      => 'group_suji_notice',
-		'title'    => '공지 설정',
-		'location' => array( array( array( 'param' => 'post_type', 'operator' => '==', 'value' => 'suji_notice' ) ) ),
-		'fields'   => array(
-			array(
-				'key'          => 'field_suji_notice_pinned',
-				'label'        => '목록 맨 위에 고정',
-				'name'         => 'notice_pinned',
-				'type'         => 'true_false',
-				'ui'           => 1,
-				'instructions' => '켜면 공지사항 목록 첫 줄에 계속 보입니다.',
-			),
-			array(
-				'key'          => 'field_suji_notice_files',
-				'label'        => '첨부 파일',
-				'name'         => 'board_files',
-				'type'         => 'repeater',
-				'layout'       => 'table',
-				'button_label' => '파일 추가',
-				'sub_fields'   => suji_field_file_rows( 'notice' ),
-			),
-		),
-	) );
 }
+
 /*
  * lofields 는 plugins_loaded 에서 lof/init 을 발동한다. 테마 functions.php 는
  * 그보다 나중에 읽히므로 lof/init 에만 걸면 이미 지나간 훅이 되어 필드가
- * 나타나지 않는다. 실제로 그랬다. init 에서 직접 등록하고, 진짜 ACF 를 쓰는
- * 경우를 위해 두 훅도 함께 남겨 둔다(같은 key 로 다시 등록해도 덮어쓰기다).
+ * 나타나지 않는다. init 에서 직접 등록하고, 진짜 ACF 를 쓰는 경우를 위해
+ * 두 훅도 함께 남겨 둔다(같은 key 재등록은 덮어쓰기다).
  */
 add_action( 'init', 'suji_register_board_fields', 5 );
 add_action( 'lof/init', 'suji_register_board_fields' );
@@ -207,17 +222,17 @@ function suji_shrink_uploaded_image( $upload ) {
 add_filter( 'wp_handle_upload', 'suji_shrink_uploaded_image' );
 
 /**
- * 공지사항 목록에서 고정된 글을 맨 위로.
+ * 어느 게시판 목록이든 고정된 글을 맨 위로.
  *
  * meta_key 를 set() 하면 그 메타가 없는 글이 목록에서 빠져 버린다(내부적으로
- * INNER JOIN 이 된다). 공지 677건 중 대부분은 이 값이 없으므로, LEFT JOIN 을
- * 직접 붙여 정렬에만 쓴다.
+ * INNER JOIN 이 된다). 대부분의 글은 이 값이 없으므로 LEFT JOIN 을 직접 붙여
+ * 정렬에만 쓴다. 예전 이름(notice_pinned)도 함께 본다.
  */
-function suji_notice_pinned_first( $clauses, $query ) {
+function suji_board_pinned_first( $clauses, $query ) {
 	if ( is_admin() || ! $query->is_main_query() ) {
 		return $clauses;
 	}
-	if ( ! $query->is_post_type_archive( 'suji_notice' ) ) {
+	if ( ! $query->is_post_type_archive( suji_board_post_types() ) && ! $query->is_tax( 'board_cat' ) ) {
 		return $clauses;
 	}
 
@@ -225,10 +240,24 @@ function suji_notice_pinned_first( $clauses, $query ) {
 
 	$clauses['join'] .= " LEFT JOIN {$wpdb->postmeta} AS suji_pin"
 		. " ON suji_pin.post_id = {$wpdb->posts}.ID"
-		. " AND suji_pin.meta_key = 'notice_pinned' ";
+		. " AND suji_pin.meta_key IN ( 'board_pinned', 'notice_pinned' ) ";
 
 	$clauses['orderby'] = " ( suji_pin.meta_value = '1' ) DESC, {$wpdb->posts}.post_date DESC ";
 
+	// 두 이름이 모두 있으면 행이 겹칠 수 있다
+	if ( empty( $clauses['groupby'] ) ) {
+		$clauses['groupby'] = "{$wpdb->posts}.ID";
+	}
+
 	return $clauses;
 }
-add_filter( 'posts_clauses', 'suji_notice_pinned_first', 10, 2 );
+add_filter( 'posts_clauses', 'suji_board_pinned_first', 10, 2 );
+
+/**
+ * 이 글이 고정되어 있는지. 목록에 배지를 붙일 때 쓴다.
+ */
+function suji_board_is_pinned( $post_id = 0 ) {
+	$post_id = $post_id ? $post_id : get_the_ID();
+	return '1' === (string) get_post_meta( $post_id, 'board_pinned', true )
+		|| '1' === (string) get_post_meta( $post_id, 'notice_pinned', true );
+}

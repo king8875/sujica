@@ -15,18 +15,41 @@ if ( ! function_exists( 'get_field' ) ) {
 
 $suji_id = get_the_ID();
 
-/* ------------------------------ 주보 링크 ------------------------------ */
-$suji_url = (string) get_field( 'bulletin_url', $suji_id );
-if ( $suji_url ) : ?>
-	<p class="board-extra-link">
-		<a class="board-link-btn" href="<?php echo esc_url( $suji_url ); ?>" target="_blank" rel="noopener noreferrer">
-			<?php esc_html_e( '주보 보기', 'suji' ); ?>
-			<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
-			     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-				<line x1="5" y1="12" x2="19" y2="12"></line>
-				<polyline points="13 6 19 12 13 18"></polyline>
-			</svg>
-		</a>
+/* -------------------------------- 링크 -------------------------------- */
+$suji_links = get_field( 'board_links', $suji_id );
+
+// 예전에 쓰던 주보 전용 칸에 값이 남아 있으면 함께 보여 준다
+$suji_legacy = (string) get_field( 'bulletin_url', $suji_id );
+if ( $suji_legacy ) {
+	$suji_links = array_merge(
+		is_array( $suji_links ) ? $suji_links : array(),
+		array( array( 'url' => $suji_legacy, 'label' => '주보 보기' ) )
+	);
+}
+
+if ( is_array( $suji_links ) && $suji_links ) : ?>
+	<p class="board-extra-links">
+		<?php foreach ( $suji_links as $suji_link ) : ?>
+			<?php
+			$suji_url = trim( (string) ( $suji_link['url'] ?? '' ) );
+			if ( '' === $suji_url ) {
+				continue;
+			}
+			$suji_text = trim( (string) ( $suji_link['label'] ?? '' ) );
+			if ( '' === $suji_text ) {
+				$suji_text = __( '바로가기', 'suji' );
+			}
+			?>
+			<a class="board-link-btn" href="<?php echo esc_url( $suji_url ); ?>"
+			   target="_blank" rel="noopener noreferrer">
+				<?php echo esc_html( $suji_text ); ?>
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+				     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<line x1="5" y1="12" x2="19" y2="12"></line>
+					<polyline points="13 6 19 12 13 18"></polyline>
+				</svg>
+			</a>
+		<?php endforeach; ?>
 	</p>
 <?php endif; ?>
 

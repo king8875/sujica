@@ -8,6 +8,10 @@ $suji_wr_hit  = suji_board_post_meta( '_g5_wr_hit' );
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'board-list-item' ); ?>>
 	<a class="board-item-link" href="<?php the_permalink(); ?>">
+		<?php if ( function_exists( 'suji_board_is_pinned' ) && suji_board_is_pinned() ) : ?>
+			<span class="board-item-pin"><?php esc_html_e( '고정', 'suji' ); ?></span>
+		<?php endif; ?>
+
 		<h2 class="board-item-title"><?php the_title(); ?></h2>
 
 		<div class="board-item-meta">

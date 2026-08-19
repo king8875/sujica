@@ -409,7 +409,10 @@
 	border-radius: 8px;
 }
 
-.board-extra-link {
+.board-extra-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.6rem;
 	margin: 1.75rem 0 0;
 }
 
