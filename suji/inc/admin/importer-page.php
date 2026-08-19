@@ -41,7 +41,7 @@ function suji_import_render() {
 		<h2 class="title"><?php esc_html_e( '2. 훑기', 'suji' ); ?></h2>
 		<p>
 			<label><?php esc_html_e( '게시판별로 볼 쪽수', 'suji' ); ?>
-				<input type="number" id="suji-pages" value="3" min="1" max="80" style="width:5em">
+				<input type="number" id="suji-pages" value="3" min="1" max="200" style="width:5em">
 			</label>
 			&nbsp;
 			<label>
@@ -51,7 +51,8 @@ function suji_import_render() {
 		</p>
 		<p class="description" style="margin-top:-.4em">
 			최근 글만 맞추려면 3쪽으로 충분합니다. 포토앨범 사진까지 전부 가져오려면
-			쪽수를 <strong>80</strong> 으로 두고 사진 채우기를 켜세요 (오래 걸립니다).
+			쪽수를 <strong>130</strong> 이상으로 두고 사진 채우기를 켜세요. 원본 목록은 한 쪽에
+			12건이라 1,482건을 모두 훑으려면 124쪽이 필요합니다 (오래 걸립니다).
 		</p>
 		<p>
 			<button class="button button-secondary" id="suji-scan"><?php esc_html_e( '훑기 시작', 'suji' ); ?></button>
@@ -245,7 +246,8 @@ add_action( 'wp_ajax_suji_import_test', 'suji_import_ajax_test' );
 function suji_import_ajax_scan() {
 	suji_import_check();
 
-	$suji_pages = max( 1, min( 80, (int) ( $_POST['pages'] ?? 3 ) ) );
+	// 구 사이트 목록은 한 쪽에 12건이라, 포토앨범 1,482건을 모두 훑으려면 124쪽이 필요하다
+	$suji_pages = max( 1, min( 200, (int) ( $_POST['pages'] ?? 3 ) ) );
 	$suji_photos = ! empty( $_POST['photos'] );
 	$suji_map   = array_keys( suji_import_map() );
 	$suji_info  = suji_import_map();
