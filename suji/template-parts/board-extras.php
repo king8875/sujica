@@ -13,6 +13,44 @@ if ( ! function_exists( 'get_field' ) ) {
 	return;
 }
 
+if ( ! function_exists( 'suji_extra_media' ) ) {
+
+/**
+ * 첨부 · 이미지 칸은 저장 방식에 따라 배열로도, 첨부 ID 로도 들어온다.
+ * (lofields 가 리피터 안쪽 값에는 형식 변환을 걸지 않는 경우가 있다)
+ * 어느 쪽이든 쓸 수 있게 풀어 준다.
+ */
+function suji_extra_media( $value ) {
+	if ( is_array( $value ) && ! empty( $value['url'] ) ) {
+		return $value;
+	}
+
+	$suji_id = is_array( $value ) ? (int) ( $value['ID'] ?? $value['id'] ?? 0 ) : (int) $value;
+	if ( ! $suji_id ) {
+		return null;
+	}
+
+	$suji_url = wp_get_attachment_url( $suji_id );
+	if ( ! $suji_url ) {
+		return null;
+	}
+
+	$suji_path = get_attached_file( $suji_id );
+
+	return array(
+		'ID'       => $suji_id,
+		'url'      => $suji_url,
+		'alt'      => (string) get_post_meta( $suji_id, '_wp_attachment_image_alt', true ),
+		'filename' => wp_basename( (string) $suji_path ),
+		'filesize' => ( $suji_path && file_exists( $suji_path ) ) ? (int) filesize( $suji_path ) : 0,
+		'sizes'    => array(
+			'large'        => (string) wp_get_attachment_image_url( $suji_id, 'large' ),
+			'medium_large' => (string) wp_get_attachment_image_url( $suji_id, 'medium_large' ),
+		),
+	);
+}
+}
+
 $suji_id = get_the_ID();
 
 /* -------------------------------- 링크 -------------------------------- */
@@ -55,8 +93,8 @@ if ( is_array( $suji_links ) && $suji_links ) : ?>
 
 <?php
 /* ------------------------------- 주보 이미지 ------------------------------- */
-$suji_bulletin_img = get_field( 'bulletin_image', $suji_id );
-if ( is_array( $suji_bulletin_img ) && ! empty( $suji_bulletin_img['url'] ) ) : ?>
+$suji_bulletin_img = suji_extra_media( get_field( 'bulletin_image', $suji_id ) );
+if ( $suji_bulletin_img ) : ?>
 	<figure class="board-extra-image">
 		<img src="<?php echo esc_url( $suji_bulletin_img['sizes']['large'] ?? $suji_bulletin_img['url'] ); ?>"
 		     alt="<?php echo esc_attr( $suji_bulletin_img['alt'] ?: get_the_title( $suji_id ) ); ?>">
@@ -70,7 +108,8 @@ if ( is_array( $suji_photos ) && $suji_photos ) : ?>
 	<ul class="board-photos">
 		<?php foreach ( $suji_photos as $suji_photo ) : ?>
 			<?php
-			if ( ! is_array( $suji_photo ) || empty( $suji_photo['url'] ) ) {
+			$suji_photo = suji_extra_media( $suji_photo );
+			if ( ! $suji_photo ) {
 				continue;
 			}
 			$suji_full  = $suji_photo['url'];
@@ -94,8 +133,8 @@ if ( is_array( $suji_files ) && $suji_files ) : ?>
 	<ul class="board-files">
 		<?php foreach ( $suji_files as $suji_row ) : ?>
 			<?php
-			$suji_file = $suji_row['file'] ?? null;
-			if ( ! is_array( $suji_file ) || empty( $suji_file['url'] ) ) {
+			$suji_file = suji_extra_media( $suji_row['file'] ?? null );
+			if ( ! $suji_file ) {
 				continue;
 			}
 			$suji_name = trim( (string) ( $suji_row['label'] ?? '' ) );
