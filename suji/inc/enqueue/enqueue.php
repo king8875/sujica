@@ -89,6 +89,10 @@ function suji_enqueue_assets() {
 		wp_enqueue_script( 'suji-accordion', SUJI_URI . '/assets/js/accordion.js', array(), suji_asset_version( '/assets/js/accordion.js' ), true );
 	}
 
+	if ( is_front_page() ) {
+		wp_enqueue_script( 'suji-home-tabs', SUJI_URI . '/assets/js/home-tabs.js', array(), suji_asset_version( '/assets/js/home-tabs.js' ), true );
+	}
+
 	if ( is_front_page() && function_exists( 'get_field' ) && ! empty( get_field( 'home_banner_slides', get_option( 'page_on_front' ) ) ) ) {
 		wp_enqueue_style( 'swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css', array(), null );
 		wp_enqueue_script( 'swiper', 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js', array(), null, true );

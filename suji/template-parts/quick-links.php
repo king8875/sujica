@@ -34,6 +34,7 @@ $suji_quick = array(
 	<?php foreach ( $suji_quick as $suji_item ) : ?>
 		<a class="suji-quick-link is-<?php echo esc_attr( $suji_item['key'] ); ?>"
 		   href="<?php echo esc_url( $suji_item['url'] ); ?>"
+		   title="<?php echo esc_attr( $suji_item['label'] ); ?>"
 		   target="_blank" rel="noopener noreferrer">
 			<span class="suji-quick-icon" aria-hidden="true">
 				<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor"

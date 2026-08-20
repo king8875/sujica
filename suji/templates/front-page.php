@@ -152,45 +152,77 @@ foreach ( $suji_gallery as $suji_post ) {
 
 
             <!-- ------------------------------ 본당 소식 ------------------------------ -->
-            <section class="home-section home-boards">
-                <?php foreach ($suji_home_boards as $suji_type) : ?>
-                    <?php
-                    $suji_board = suji_board_of($suji_type);
-                    $suji_posts = suji_board_recent($suji_type, 5);
-                    $suji_link = suji_board_link($suji_type);
-                    ?>
-                    <div class="home-board">
-                        <div class="home-board-head">
-                            <h2 class="home-board-title"><?php echo esc_html($suji_board['name']); ?></h2>
-                            <?php if ($suji_link) : ?>
-                                <a class="home-board-more" href="<?php echo esc_url($suji_link); ?>">
-                                    <span class="screen-reader-text"><?php echo esc_html($suji_board['name']); ?> </span>더보기
-                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
-                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                        <polyline points="9 6 15 12 9 18"></polyline>
-                                    </svg>
-                                </a>
+            <?php
+            // 탭으로 넘겨 보므로 한 게시판씩 넉넉히 보여 준다
+            $suji_tabs = array();
+            foreach ($suji_home_boards as $suji_type) {
+                $suji_def = suji_board_of($suji_type);
+                if (!$suji_def) {
+                    continue;
+                }
+                $suji_tabs[] = array(
+                    'type'  => $suji_type,
+                    'name'  => $suji_def['name'],
+                    'link'  => suji_board_link($suji_type),
+                    'posts' => suji_board_recent($suji_type, 6),
+                );
+            }
+            ?>
+
+            <?php if ($suji_tabs) : ?>
+                <section class="home-section home-boards">
+                    <div class="home-tabs" role="tablist" aria-label="<?php esc_attr_e('본당 소식', 'suji'); ?>">
+                        <?php foreach ($suji_tabs as $suji_i => $suji_tab) : ?>
+                            <button type="button"
+                                    class="home-tab<?php echo 0 === $suji_i ? ' is-active' : ''; ?>"
+                                    id="home-tab-<?php echo esc_attr($suji_tab['type']); ?>"
+                                    role="tab"
+                                    aria-selected="<?php echo 0 === $suji_i ? 'true' : 'false'; ?>"
+                                    aria-controls="home-panel-<?php echo esc_attr($suji_tab['type']); ?>"
+                                    tabindex="<?php echo 0 === $suji_i ? '0' : '-1'; ?>">
+                                <?php echo esc_html($suji_tab['name']); ?>
+                            </button>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <?php foreach ($suji_tabs as $suji_i => $suji_tab) : ?>
+                        <div class="home-panel<?php echo 0 === $suji_i ? ' is-active' : ''; ?>"
+                             id="home-panel-<?php echo esc_attr($suji_tab['type']); ?>"
+                             role="tabpanel"
+                             aria-labelledby="home-tab-<?php echo esc_attr($suji_tab['type']); ?>"
+                            <?php echo 0 === $suji_i ? '' : 'hidden'; ?>>
+
+                            <?php if ($suji_tab['posts']) : ?>
+                                <ul class="home-board-list">
+                                    <?php foreach ($suji_tab['posts'] as $suji_post) : ?>
+                                        <li>
+                                            <a href="<?php echo esc_url(get_permalink($suji_post)); ?>">
+                                                <span class="home-board-post-title"><?php echo esc_html(get_the_title($suji_post)); ?></span>
+                                                <time class="home-board-date"
+                                                      datetime="<?php echo esc_attr(get_the_date('c', $suji_post)); ?>"><?php echo esc_html(get_the_date('Y.m.d', $suji_post)); ?></time>
+                                            </a>
+                                        </li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php else : ?>
+                                <p class="home-board-empty"><?php esc_html_e('아직 등록된 글이 없습니다.', 'suji'); ?></p>
+                            <?php endif; ?>
+
+                            <?php if ($suji_tab['link']) : ?>
+                                <p class="home-panel-more">
+                                    <a class="home-board-more" href="<?php echo esc_url($suji_tab['link']); ?>">
+                                        <?php echo esc_html($suji_tab['name']); ?> 전체 보기
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
+                                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                            <polyline points="9 6 15 12 9 18"></polyline>
+                                        </svg>
+                                    </a>
+                                </p>
                             <?php endif; ?>
                         </div>
-
-                        <?php if ($suji_posts) : ?>
-                            <ul class="home-board-list">
-                                <?php foreach ($suji_posts as $suji_post) : ?>
-                                    <li>
-                                        <a href="<?php echo esc_url(get_permalink($suji_post)); ?>">
-                                            <span class="home-board-post-title"><?php echo esc_html(get_the_title($suji_post)); ?></span>
-                                            <time class="home-board-date"
-                                                  datetime="<?php echo esc_attr(get_the_date('c', $suji_post)); ?>"><?php echo esc_html(get_the_date('Y.m.d', $suji_post)); ?></time>
-                                        </a>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        <?php else : ?>
-                            <p class="home-board-empty"><?php esc_html_e('아직 등록된 글이 없습니다.', 'suji'); ?></p>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </section>
+                    <?php endforeach; ?>
+                </section>
+            <?php endif; ?>
 
             <!-- ------------------------------ 포토앨범 ------------------------------ -->
             <?php if ($suji_gallery) : ?>

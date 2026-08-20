@@ -279,25 +279,66 @@
 
 /* ------------------------------ 본당 소식 ------------------------------ */
 /* 공지사항 · 본당 주보 · 사제 게시판을 나란히 둔다. */
-/* 게시판 4개 — 넓은 화면 4열, 좁아지면 2열 → 1열 */
-.home-boards {
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 2rem 1.5rem;
+/* 게시판 4개를 탭으로 넘겨 본다 */
+.home-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	margin-bottom: 1.5rem;
+	border-bottom: 2px solid #111;
 }
 
-.home-board {
+.home-tab {
+	position: relative;
+	bottom: -2px;
+	padding: 0.7rem 1.35rem;
+	border: 2px solid transparent;
+	border-bottom: 0;
+	border-radius: 10px 10px 0 0;
+	background: none;
+	font-family: inherit;
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #888;
+	cursor: pointer;
+}
+
+.home-tab:hover {
+	color: #111;
+}
+
+.home-tab.is-active {
+	border-color: #111;
+	background: #fff;
+	color: #111;
+	font-weight: 700;
+}
+
+.home-panel {
 	min-width: 0;
 }
 
+.home-panel-more {
+	margin: 1.25rem 0 0;
+	text-align: right;
+}
+
+/* 탭 하나가 폭을 다 쓰므로 두 칸으로 나눠 담는다 */
 .home-board-list {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 0 2.5rem;
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.home-board-list li + li {
+.home-board-list li {
 	border-top: 1px solid #f0f0ec;
+}
+
+.home-board-list li:nth-child(-n + 2) {
+	border-top: 0;
 }
 
 .home-board-list a {
@@ -355,6 +396,14 @@
 	margin: 0;
 	padding: 0;
 	list-style: none;
+}
+
+/*
+ * 제목에 white-space: nowrap 이 걸려 있어, 이것이 없으면 긴 제목이 열을
+ * 밀어내 칸 너비가 서로 달라진다(129px 대 176px 로 어긋났다).
+ */
+.home-gallery-grid > li {
+	min-width: 0;
 }
 
 .home-gallery-grid a {
@@ -447,10 +496,35 @@
 }
 
 /* ------------------------------ 반응형 ------------------------------ */
-@media (max-width: 1100px) {
-	.home-boards {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 2rem 1.75rem;
+@media (max-width: 780px) {
+	.home-board-list {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+
+	.home-board-list li:nth-child(-n + 2) {
+		border-top: 1px solid #f0f0ec;
+	}
+
+	.home-board-list li:first-child {
+		border-top: 0;
+	}
+
+	/* 탭이 많아 줄바꿈되면 가로로 넘겨 본다 */
+	.home-tabs {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+
+	.home-tabs::-webkit-scrollbar {
+		display: none;
+	}
+
+	.home-tab {
+		flex-shrink: 0;
+		padding: 0.6rem 1rem;
+		font-size: 0.9rem;
 	}
 }
 
@@ -474,7 +548,6 @@
 		margin-bottom: 2.5rem;
 	}
 
-	.home-boards,
 	.home-gallery-list {
 		grid-template-columns: 1fr;
 		gap: 2rem;
@@ -494,6 +567,6 @@
 	}
 
 	.home-gallery-grid {
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
