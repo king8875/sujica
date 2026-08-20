@@ -9,7 +9,7 @@ get_header();
 /**
  * 홈에 띄울 게시판 — 슬러그, 표시 이름, 짧은 설명.
  */
-$suji_home_boards = array( 'suji_notice', 'suji_bulletin', 'suji_story' );
+$suji_home_boards = array( 'suji_notice', 'suji_bulletin', 'suji_story', 'suji_docs' );
 
 $suji_gallery = suji_board_recent( 'suji_gallery', 6 );
 
@@ -137,6 +137,17 @@ foreach ( $suji_gallery as $suji_post ) {
                     </div>
                 </div>
 
+
+                <?php // 원본 사이트가 쓰던 구글 캘린더 (본당 일정 · 주요 행사) ?>
+                <div class="home-calendar">
+                    <h2 class="home-calendar-title"><?php esc_html_e( '본당 일정', 'suji' ); ?></h2>
+                    <div class="home-calendar-frame">
+                        <iframe
+                            src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;ctz=Asia%2FSeoul&amp;showPrint=0&amp;mode=AGENDA&amp;showCalendars=0&amp;showTz=0&amp;src=M2ZkNGIwNGExYWNkZGE1NzU4NGE0NmE5YWJmOTdlNDkzMDJlOWU0ZDEyM2M5YTdjMzk2NTY1YTVhNzI3NzI1MEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&amp;src=ZGYwMWNlMGRiOWM3YTU4YWE3NDllMGY0NjM0YmI2NWZjODY1ZmY2YzIzM2FlMGEwYWJmMWI5NDdhMjdlZjUyOEBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%23ec0000&amp;color=%23a79b8e"
+                            title="<?php esc_attr_e( '본당 일정 달력', 'suji' ); ?>"
+                            loading="lazy" scrolling="no"></iframe>
+                    </div>
+                </div>
             </div>
 
 

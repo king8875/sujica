@@ -54,6 +54,8 @@ $suji_footer_email   = get_theme_mod( 'suji_footer_email' );
 	</div>
 </footer>
 
+<?php get_template_part( 'template-parts/quick-links' ); ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>
