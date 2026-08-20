@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $suji_wr_name = suji_board_post_meta( '_g5_wr_name' );
-$suji_wr_hit  = suji_board_post_meta( '_g5_wr_hit' );
+$suji_wr_hit  = function_exists( 'suji_board_views' ) ? suji_board_views() : 0;
 ?>
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'board-list-item' ); ?>>
 	<a class="board-item-link" href="<?php the_permalink(); ?>">

@@ -39,6 +39,19 @@ if ( ! is_array( $suji_board ) ) {
 	) );
 	?>
 
+	<?php if ( function_exists( 'suji_can_write_board' ) && suji_can_write_board( $suji_type ) ) : ?>
+		<p class="board-write-bar">
+			<a class="board-write-btn" href="<?php echo esc_url( suji_board_form_url( $suji_type ) ); ?>">
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+				     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<line x1="12" y1="5" x2="12" y2="19"></line>
+					<line x1="5" y1="12" x2="19" y2="12"></line>
+				</svg>
+				<?php esc_html_e( '글쓰기', 'suji' ); ?>
+			</a>
+		</p>
+	<?php endif; ?>
+
 	<?php if ( ! empty( $suji_board['taxonomy'] ) ) : ?>
 		<?php
 		// 단체 게시판은 위원회를 걸러 볼 수 있게 한다

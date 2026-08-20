@@ -1,0 +1,291 @@
+/* ---------------------------- 글쓰기 버튼 ---------------------------- */
+.board-write-bar {
+	display: flex;
+	justify-content: flex-end;
+	margin: 0 0 1.25rem;
+}
+
+.board-write-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	padding: 0.6rem 1.25rem;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-size: 0.9rem;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.15s ease;
+}
+
+.board-write-btn:hover {
+	background: #333;
+	color: #fff;
+}
+
+.board-write-btn.is-small {
+	padding: 0.4rem 0.9rem;
+	font-size: 0.82rem;
+}
+
+.board-single-edit {
+	margin: 0 0 1rem;
+}
+
+/* ------------------------------ 폼 화면 ------------------------------ */
+#primary.board-form-page {
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 0 1.5rem 5rem;
+}
+
+.board-form-errors {
+	margin-bottom: 1.5rem;
+	padding: 1rem 1.25rem;
+	border: 1px solid #e5c2c2;
+	border-radius: 10px;
+	background: #fdf5f5;
+	color: #8a2b2b;
+}
+
+.board-form-errors p {
+	margin: 0 0 0.35rem;
+	font-size: 0.92rem;
+}
+
+.board-form-errors p:last-child {
+	margin-bottom: 0;
+}
+
+.board-form-field {
+	margin-bottom: 1.75rem;
+}
+
+.board-form-field > label {
+	display: block;
+	margin-bottom: 0.5rem;
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #111;
+}
+
+.board-form-field input[type="text"],
+.board-form-field input[type="url"],
+.board-form-field textarea {
+	width: 100%;
+	padding: 0.7rem 1rem;
+	border: 1px solid #e0e0da;
+	border-radius: 10px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 0.95rem;
+	line-height: 1.7;
+	color: #111;
+	transition: border-color 0.15s ease;
+}
+
+.board-form-field input[type="text"]:focus,
+.board-form-field input[type="url"]:focus,
+.board-form-field textarea:focus {
+	outline: none;
+	border-color: #111;
+}
+
+.board-form-field textarea {
+	resize: vertical;
+	min-height: 14rem;
+}
+
+.board-form-field input[type="file"] {
+	display: block;
+	width: 100%;
+	padding: 0.7rem;
+	border: 1px dashed #d8d8d2;
+	border-radius: 10px;
+	background: #fafaf8;
+	font-size: 0.88rem;
+}
+
+.board-form-hint {
+	margin: 0.45rem 0 0;
+	font-size: 0.82rem;
+	color: #999;
+}
+
+/* 링크 줄 */
+.board-form-row {
+	display: flex;
+	gap: 0.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.board-form-row input[type="url"] {
+	flex: 1 1 60%;
+}
+
+.board-form-row input[type="text"] {
+	flex: 1 1 40%;
+}
+
+.board-form-remove {
+	flex-shrink: 0;
+	width: 40px;
+	border: 1px solid #e0e0da;
+	border-radius: 10px;
+	background: #fff;
+	color: #999;
+	font-size: 1.1rem;
+	line-height: 1;
+	cursor: pointer;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.board-form-remove:hover {
+	border-color: #111;
+	color: #111;
+}
+
+.board-form-add {
+	margin-top: 0.35rem;
+	padding: 0.5rem 1rem;
+	border: 1px solid #e0e0da;
+	border-radius: 999px;
+	background: #fff;
+	font-family: inherit;
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: #444;
+	cursor: pointer;
+	transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.board-form-add:hover {
+	border-color: #111;
+	color: #111;
+}
+
+/* 이미 올린 사진 · 파일 */
+.board-form-thumbs {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+	gap: 0.75rem;
+	margin: 0 0 0.75rem;
+	padding: 0;
+	list-style: none;
+}
+
+.board-form-thumbs img {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1;
+	object-fit: cover;
+	border-radius: 8px;
+}
+
+.board-form-files {
+	margin: 0 0 0.75rem;
+	padding: 0;
+	list-style: none;
+}
+
+.board-form-files li {
+	padding: 0.4rem 0;
+	border-bottom: 1px solid #f0f0ec;
+}
+
+.board-form-keep,
+.board-form-check {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	font-size: 0.85rem;
+	color: #444;
+	cursor: pointer;
+}
+
+.board-form-check {
+	font-size: 0.92rem;
+	font-weight: 600;
+	color: #111;
+}
+
+/* 버튼 줄 */
+.board-form-actions {
+	display: flex;
+	align-items: center;
+	gap: 0.6rem;
+	margin-top: 2.5rem;
+	padding-top: 1.75rem;
+	border-top: 1px solid #e5e5e5;
+}
+
+.board-form-submit {
+	padding: 0.8rem 2rem;
+	border: 0;
+	border-radius: 999px;
+	background: #111;
+	color: #fff;
+	font-family: inherit;
+	font-size: 0.95rem;
+	font-weight: 700;
+	cursor: pointer;
+	transition: background-color 0.15s ease;
+}
+
+.board-form-submit:hover {
+	background: #333;
+}
+
+.board-form-cancel {
+	padding: 0.8rem 1.5rem;
+	color: #888;
+	font-size: 0.9rem;
+	text-decoration: none;
+}
+
+.board-form-cancel:hover {
+	color: #111;
+}
+
+.board-form-delete {
+	margin-left: auto;
+	padding: 0.8rem 1.35rem;
+	border: 1px solid #e5c2c2;
+	border-radius: 999px;
+	background: #fff;
+	color: #a33;
+	font-family: inherit;
+	font-size: 0.88rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.board-form-delete:hover {
+	background: #a33;
+	color: #fff;
+}
+
+@media (max-width: 600px) {
+	.board-form-row {
+		flex-wrap: wrap;
+	}
+
+	.board-form-row input[type="url"],
+	.board-form-row input[type="text"] {
+		flex: 1 1 100%;
+	}
+
+	.board-form-actions {
+		flex-wrap: wrap;
+	}
+
+	.board-form-submit {
+		flex: 1 1 100%;
+	}
+
+	.board-form-delete {
+		margin-left: 0;
+	}
+}

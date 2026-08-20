@@ -23,6 +23,19 @@ $suji_board = suji_board_of( 'suji_gallery' );
 	) );
 	?>
 
+	<?php if ( function_exists( 'suji_can_write_board' ) && suji_can_write_board( 'suji_gallery' ) ) : ?>
+		<p class="board-write-bar">
+			<a class="board-write-btn" href="<?php echo esc_url( suji_board_form_url( 'suji_gallery' ) ); ?>">
+				<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+				     stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<line x1="12" y1="5" x2="12" y2="19"></line>
+					<line x1="5" y1="12" x2="19" y2="12"></line>
+				</svg>
+				<?php esc_html_e( '글쓰기', 'suji' ); ?>
+			</a>
+		</p>
+	<?php endif; ?>
+
 	<?php if ( have_posts() ) : ?>
 		<div class="gallery-grid">
 			<?php
@@ -60,7 +73,18 @@ $suji_board = suji_board_of( 'suji_gallery' );
 					</div>
 					<div class="gallery-grid-caption">
 						<span class="gallery-grid-title"><?php the_title(); ?></span>
-						<span class="gallery-grid-date"><?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?></span>
+						<span class="gallery-grid-meta">
+							<span class="gallery-grid-date"><?php echo esc_html( get_the_date( 'Y.m.d' ) ); ?></span>
+							<span class="gallery-grid-hit">
+								<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor"
+								     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+									<path d="M1.5 12S5 5.5 12 5.5 22.5 12 22.5 12 19 18.5 12 18.5 1.5 12 1.5 12z"></path>
+									<circle cx="12" cy="12" r="3"></circle>
+								</svg>
+								<span class="screen-reader-text"><?php esc_html_e( '조회수', 'suji' ); ?> </span>
+								<?php echo esc_html( number_format_i18n( suji_board_views() ) ); ?>
+							</span>
+						</span>
 					</div>
 				</a>
 			<?php endwhile; ?>

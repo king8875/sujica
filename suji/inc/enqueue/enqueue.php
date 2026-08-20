@@ -70,6 +70,9 @@ function suji_enqueue_assets() {
 		wp_enqueue_style( 'suji-catholic-about', SUJI_URI . '/assets/css/pages/catholic-about.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/catholic-about.css' ) );
 	}
 
+	// 글쓰기 버튼과 폼 화면
+	wp_enqueue_style( 'suji-board-form', SUJI_URI . '/assets/css/pages/board-form.css', array( 'suji-common' ), suji_asset_version( '/assets/css/pages/board-form.css' ) );
+
 	if ( is_post_type_archive( suji_board_post_types() ) || is_tax( 'board_cat' ) || is_search() ) {
 		wp_enqueue_style( 'suji-board-archive', SUJI_URI . '/assets/css/pages/board-archive.css', array( 'suji-board-post' ), suji_asset_version( '/assets/css/pages/board-archive.css' ) );
 	}

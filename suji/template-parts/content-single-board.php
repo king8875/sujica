@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $suji_wr_name = suji_board_post_meta( '_g5_wr_name' );
-$suji_wr_hit  = suji_board_post_meta( '_g5_wr_hit' );
+$suji_wr_hit  = function_exists( 'suji_board_views' ) ? suji_board_views() : 0;
 $suji_label   = suji_board_label();
 $suji_archive = suji_board_link( get_post_type() );
 
@@ -23,6 +23,14 @@ $suji_next = get_next_post();
 
 		<h1 class="board-single-title"><?php the_title(); ?></h1>
 
+		<?php if ( function_exists( 'suji_board_form_url' ) && current_user_can( 'edit_post', get_the_ID() ) ) : ?>
+			<p class="board-single-edit">
+				<a class="board-write-btn is-small" href="<?php echo esc_url( suji_board_form_url( get_post_type(), get_the_ID() ) ); ?>">
+					<?php esc_html_e( '이 글 수정', 'suji' ); ?>
+				</a>
+			</p>
+		<?php endif; ?>
+
 		<div class="board-single-meta">
 			<?php if ( $suji_wr_name ) : ?>
 				<span class="board-single-author"><?php echo esc_html( $suji_wr_name ); ?></span>
@@ -32,17 +40,15 @@ $suji_next = get_next_post();
 				<?php echo esc_html( get_the_date( 'Y.m.d H:i' ) ); ?>
 			</time>
 
-			<?php if ( $suji_wr_hit ) : ?>
-				<span class="board-single-hit">
+			<span class="board-single-hit">
 					<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
 					     stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
 						<path d="M1.5 12S5 5.5 12 5.5 22.5 12 22.5 12 19 18.5 12 18.5 1.5 12 1.5 12z"></path>
 						<circle cx="12" cy="12" r="3"></circle>
 					</svg>
 					<span class="screen-reader-text"><?php esc_html_e( '조회수', 'suji' ); ?> </span>
-					<?php echo esc_html( number_format_i18n( (int) $suji_wr_hit ) ); ?>
-				</span>
-			<?php endif; ?>
+				<?php echo esc_html( number_format_i18n( (int) $suji_wr_hit ) ); ?>
+			</span>
 		</div>
 	</header>
 

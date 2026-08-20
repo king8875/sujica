@@ -179,10 +179,23 @@ function suji_import_parse_list( $html ) {
 		preg_match_all( '#<tr[^>]*>(.*?)</tr>#s', $suji_tb[1], $suji_rows );
 		foreach ( $suji_rows[1] as $suji_row ) {
 			if ( preg_match( '#class="bo_tit">\s*<a[^>]*wr_id=(\d+)[^>]*>(.*?)</a>#s', $suji_row, $suji_m ) ) {
+				// 목록 한 줄에 작성자와 조회수도 함께 들어 있다
+				$suji_author = '';
+				if ( preg_match( '#class="[^"]*sv_(?:member|guest)[^"]*"[^>]*>(.*?)</#s', $suji_row, $suji_a ) ) {
+					$suji_author = trim( wp_strip_all_tags( $suji_a[1] ) );
+				}
+
+				$suji_hit = null;
+				if ( preg_match( '#class="td_num"[^>]*>\s*([\d,]+)\s*<#s', $suji_row, $suji_h ) ) {
+					$suji_hit = (int) str_replace( ',', '', $suji_h[1] );
+				}
+
 				$suji_items[ $suji_m[1] ] = array(
-					'title' => trim( wp_strip_all_tags( $suji_m[2] ) ),
+					'title'  => trim( wp_strip_all_tags( $suji_m[2] ) ),
 					// 목록의 내려받기 아이콘이 첨부 유무를 알려준다
-					'files' => ( false !== strpos( $suji_row, 'fa-download' ) ),
+					'files'  => ( false !== strpos( $suji_row, 'fa-download' ) ),
+					'author' => $suji_author,
+					'hit'    => $suji_hit,
 				);
 			}
 		}
@@ -194,7 +207,12 @@ function suji_import_parse_list( $html ) {
 		foreach ( $suji_m as $suji_one ) {
 			$suji_title = trim( wp_strip_all_tags( $suji_one[2] ) );
 			if ( '' !== $suji_title && ! isset( $suji_items[ $suji_one[1] ] ) ) {
-				$suji_items[ $suji_one[1] ] = array( 'title' => $suji_title, 'files' => false );
+				$suji_items[ $suji_one[1] ] = array(
+					'title'  => $suji_title,
+					'files'  => false,
+					'author' => '',
+					'hit'    => null,
+				);
 			}
 		}
 	}

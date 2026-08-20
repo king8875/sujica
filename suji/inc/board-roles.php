@@ -259,23 +259,30 @@ function suji_hide_admin_bar_for_members( $show ) {
 add_filter( 'show_admin_bar', 'suji_hide_admin_bar_for_members' );
 
 /**
- * 일반 회원이 wp-admin 으로 들어오면 홈으로 돌려보낸다.
- * ajax 와 프로필 화면은 건드리지 않는다.
+ * 워드프레스 관리자 화면은 최고관리자만 쓴다.
+ *
+ * 게시판 관리자는 프론트에서 글을 쓰고 고치므로 관리 화면에 들어갈 일이 없다.
+ * 일반 회원도 마찬가지다. ajax 와 프로필 화면은 열어 둔다.
  */
-function suji_keep_members_out_of_admin() {
+function suji_restrict_admin_area() {
 	if ( ! is_admin() || wp_doing_ajax() || ! is_user_logged_in() ) {
 		return;
 	}
-	if ( current_user_can( 'edit_posts' ) ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
 	global $pagenow;
-	if ( 'profile.php' === $pagenow ) {
+	// 프로필과 미디어 업로드 창은 필요하다
+	if ( in_array( $pagenow, array( 'profile.php', 'async-upload.php', 'media-upload.php' ), true ) ) {
 		return;
 	}
 
-	wp_safe_redirect( home_url( '/' ) );
+	// 게시판 관리자는 담당 게시판 목록으로, 그 외에는 홈으로
+	$suji_mine = suji_user_boards();
+	$suji_to   = $suji_mine ? suji_board_link( reset( $suji_mine ) ) : home_url( '/' );
+
+	wp_safe_redirect( $suji_to ? $suji_to : home_url( '/' ) );
 	exit;
 }
-add_action( 'admin_init', 'suji_keep_members_out_of_admin' );
+add_action( 'admin_init', 'suji_restrict_admin_area' );

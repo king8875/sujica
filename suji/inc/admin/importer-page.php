@@ -334,6 +334,7 @@ function suji_import_ajax_scan() {
 
 	$suji_new = 0;
 	$suji_linked = 0;
+	$suji_hits = 0;
 	$suji_for_photos = 0;
 
 	for ( $suji_p = 1; $suji_p <= $suji_pages; $suji_p++ ) {
@@ -361,6 +362,15 @@ function suji_import_ajax_scan() {
 					update_post_meta( $suji_post_id, '_g5_wr_id', (string) $suji_wr_id );
 					update_post_meta( $suji_post_id, '_g5_bo_table', $suji_bo );
 					$suji_linked++;
+				}
+
+				// 목록에 실려 있는 작성자·조회수를 비어 있는 글에 채운다
+				if ( ! empty( $suji_item['author'] ) && ! get_post_meta( $suji_post_id, '_g5_wr_name', true ) ) {
+					update_post_meta( $suji_post_id, '_g5_wr_name', $suji_item['author'] );
+				}
+				if ( null !== $suji_item['hit'] && '' === (string) get_post_meta( $suji_post_id, '_g5_wr_hit', true ) ) {
+					update_post_meta( $suji_post_id, '_g5_wr_hit', (string) $suji_item['hit'] );
+					$suji_hits++;
 				}
 
 				// 사진이 없거나 첨부가 달려 있으면 채우기 대상
@@ -403,8 +413,8 @@ function suji_import_ajax_scan() {
 		'queue'  => count( $suji_queue ),
 		'enrich' => count( $suji_enrich ),
 		'lines'  => array( sprintf(
-			'%-10s 새 글 %d건 · 번호 연결 %d건%s',
-			$suji_bo, $suji_new, $suji_linked,
+			'%-10s 새 글 %d건 · 번호 연결 %d건 · 조회수 채움 %d건%s',
+			$suji_bo, $suji_new, $suji_linked, $suji_hits,
 			$suji_photos ? sprintf( ' · 사진 채울 글 %d건', $suji_for_photos ) : ''
 		) ),
 	) );
